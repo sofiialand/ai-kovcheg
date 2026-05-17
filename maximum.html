@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Ковчег — Как получить максимум</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafafa;
+  --bg-card: #ffffff;
+  --bg-soft: #f3f4f6;
+  --bg-warm: #fffbf0;
+  --border: rgba(0,0,0,0.06);
+  --border-hover: rgba(0,0,0,0.12);
+  --text: #1a1a2e;
+  --text-mid: #52556a;
+  --text-dim: #9096a8;
+  --accent: #d97706;
+  --accent-light: #f59e0b;
+  --accent-bg: rgba(217,119,6,0.07);
+  --accent-border: rgba(217,119,6,0.2);
+  --green: #16a34a;
+  --green-bg: rgba(22,163,74,0.06);
+  --green-border: rgba(22,163,74,0.18);
+  --red: #dc2626;
+  --red-bg: rgba(220,38,38,0.05);
+  --red-border: rgba(220,38,38,0.15);
+  --blue: #2563eb;
+  --blue-bg: rgba(37,99,235,0.06);
+  --blue-border: rgba(37,99,235,0.18);
+  --purple: #7c3aed;
+  --purple-bg: rgba(124,58,237,0.06);
+  --purple-border: rgba(124,58,237,0.18);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.04);
+  --radius: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  line-height: 1.68;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+.page { max-width: 760px; margin: 0 auto; padding: 56px 28px 100px; }
+.hero { margin-bottom: 56px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 13px; border-radius: 999px;
+  background: var(--accent-bg); border: 1px solid var(--accent-border);
+  font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 24px;
+}
+.hero-badge i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-light); display: block; }
+h1.hero-title {
+  font-family: 'Unbounded', sans-serif; font-weight: 900;
+  font-size: clamp(32px, 6.5vw, 52px); line-height: 1.0;
+  color: var(--text); letter-spacing: -0.025em; margin-bottom: 6px;
+}
+h1.hero-title em { font-style: normal; color: var(--accent); }
+.hero-sub {
+  font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 24px;
+}
+.hero-desc { font-size: 16px; color: var(--text-mid); line-height: 1.8; max-width: 600px; }
+.hero-desc strong { color: var(--text); font-weight: 700; }
+.divider { height: 1px; background: var(--border); margin: 48px 0; }
+.block { margin-bottom: 64px; }
+.section-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-title {
+  font-family: 'Unbounded', sans-serif; font-weight: 800;
+  font-size: clamp(19px, 3vw, 26px); color: var(--text);
+  line-height: 1.18; margin-bottom: 10px; letter-spacing: -0.015em;
+}
+.section-desc { font-size: 14.5px; color: var(--text-mid); line-height: 1.75; margin-bottom: 24px; }
+.profiles { display: flex; flex-direction: column; gap: 12px; }
+.profile-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px 26px;
+  box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, border-color 0.2s;
+  position: relative; overflow: hidden;
+}
+.profile-card:hover { box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+.profile-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; }
+.profile-card.green::before { background: var(--green); }
+.profile-card.blue::before { background: var(--blue); }
+.profile-card.purple::before { background: var(--purple); }
+.profile-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.profile-icon {
+  width: 44px; height: 44px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.profile-card.green .profile-icon { background: var(--green-bg); border: 1px solid var(--green-border); }
+.profile-card.blue .profile-icon { background: var(--blue-bg); border: 1px solid var(--blue-border); }
+.profile-card.purple .profile-icon { background: var(--purple-bg); border: 1px solid var(--purple-border); }
+.profile-name { font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 14px; color: var(--text); }
+.profile-sub { font-size: 12.5px; color: var(--text-dim); margin-top: 1px; }
+.profile-body { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 16px; }
+.profile-strategy { background: var(--bg-soft); border-radius: 10px; padding: 16px 20px; }
+.strategy-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px;
+}
+.profile-card.green .strategy-label { color: var(--green); }
+.profile-card.blue .strategy-label { color: var(--blue); }
+.profile-card.purple .strategy-label { color: var(--purple); }
+.strategy-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.strategy-list li {
+  display: flex; gap: 9px; align-items: flex-start;
+  font-size: 13.5px; color: var(--text-mid); line-height: 1.6;
+}
+.strategy-list li::before {
+  content: '→'; color: var(--accent); flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; margin-top: 2px;
+}
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: flex; gap: 20px; position: relative; padding-bottom: 20px; }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-line { width: 38px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.tl-dot {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--accent-bg); border: 1.5px solid var(--accent-border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700;
+  color: var(--accent); z-index: 1;
+}
+.tl-stem { width: 1.5px; flex: 1; background: linear-gradient(180deg, var(--accent-border), var(--border)); margin-top: 6px; }
+.tl-item:last-child .tl-stem { display: none; }
+.tl-content { flex: 1; padding-top: 7px; }
+.tl-title { font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 13px; color: var(--text); margin-bottom: 3px; }
+.tl-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); margin-bottom: 6px; }
+.tl-desc { font-size: 13.5px; color: var(--text-mid); line-height: 1.65; }
+.highlight {
+  background: var(--bg-warm); border: 1px solid var(--accent-border);
+  border-radius: 12px; padding: 18px 22px; font-size: 14px;
+  color: var(--text); line-height: 1.7; margin: 20px 0;
+}
+.two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.col-card { border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow-sm); }
+.col-card.green { background: var(--green-bg); border: 1px solid var(--green-border); }
+.col-card.red { background: var(--red-bg); border: 1px solid var(--red-border); }
+.col-label {
+  font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px;
+}
+.col-label.green { color: var(--green); }
+.col-label.red { color: var(--red); }
+.col-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.col-list li { display: flex; gap: 9px; font-size: 13px; color: var(--text-mid); line-height: 1.55; }
+.note {
+  background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 18px; font-size: 13px; color: var(--text-mid);
+  display: flex; gap: 10px; align-items: flex-start; margin: 14px 0; line-height: 1.65;
+}
+.steps { display: flex; flex-direction: column; gap: 10px; }
+.step-item {
+  display: flex; gap: 16px; align-items: flex-start;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.step-item:hover { box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+.step-num {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--accent-bg); border: 1.5px solid var(--accent-border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800;
+  color: var(--accent); flex-shrink: 0;
+}
+.step-body strong {
+  font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 13px;
+  color: var(--text); display: block; margin-bottom: 4px;
+}
+.step-body p { font-size: 13.5px; color: var(--text-mid); line-height: 1.65; }
+.warn-box {
+  background: var(--bg-warm); border: 1px solid rgba(217,119,6,0.2);
+  border-radius: 12px; padding: 16px 20px; display: flex; gap: 12px;
+  align-items: flex-start; font-size: 13.5px; color: var(--text-mid);
+  line-height: 1.65; margin: 16px 0;
+}
+.warn-box strong { color: var(--text); }
+.manifesto { display: flex; flex-direction: column; gap: 3px; }
+.manifesto-item {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 20px; display: flex; gap: 12px; align-items: flex-start;
+  font-size: 13.5px; color: var(--text-mid); line-height: 1.65;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.manifesto-item:hover { border-color: var(--border-hover); box-shadow: var(--shadow-sm); }
+.manifesto-item:first-child { border-radius: 12px 12px 8px 8px; }
+.manifesto-item:last-child { border-radius: 8px 8px 12px 12px; }
+.manifesto-item strong { color: var(--text); }
+.mdot { color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+.card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 24px; margin-bottom: 10px;
+  box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, border-color 0.2s;
+}
+.card:hover { box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+.card-title { font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 13px; color: var(--text); margin-bottom: 8px; }
+.card-body { font-size: 13.5px; color: var(--text-mid); line-height: 1.7; }
+.quote-big {
+  border-left: 3px solid var(--accent); padding: 22px 28px; margin: 24px 0;
+  background: var(--bg-warm); border-radius: 0 12px 12px 0;
+}
+.quote-big .qtext {
+  font-family: 'Unbounded', sans-serif; font-weight: 800;
+  font-size: clamp(15px, 2.2vw, 20px); color: var(--text);
+  line-height: 1.3; letter-spacing: -0.01em;
+}
+.quote-big .qsub { font-size: 13.5px; color: var(--text-mid); margin-top: 12px; line-height: 1.65; }
+.footer {
+  border-top: 1px solid var(--border); padding-top: 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-brand { font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 13px; color: var(--accent); }
+.footer-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); }
+.materials { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+.mat-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 22px;
+  box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, border-color 0.2s;
+  position: relative; overflow: hidden;
+}
+.mat-card:hover { box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+.mat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2.5px;
+  background: linear-gradient(90deg, var(--accent-light), rgba(245,158,11,0));
+}
+.mat-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: var(--accent-bg); border: 1px solid var(--accent-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; margin-bottom: 12px;
+}
+.mat-title {
+  font-family: 'Unbounded', sans-serif; font-weight: 800;
+  font-size: 12.5px; color: var(--text); margin-bottom: 6px;
+}
+.mat-body { font-size: 13px; color: var(--text-mid); line-height: 1.65; }
+.mat-body strong { color: var(--text); font-weight: 600; }
+.confidential {
+  text-align: center; font-size: 11.5px; color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em;
+  padding: 20px 0 0; line-height: 1.6; opacity: 0.7;
+}
+.confidential .lock { display: inline-block; margin-right: 4px; font-style: normal; }
+@media (max-width: 640px) {
+  .page { padding: 36px 18px 80px; }
+  .two-cols, .materials { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-badge"><i></i> Перед стартом</div>
+    <h1 class="hero-title">Как получить<br><em>максимум</em></h1>
+    <div class="hero-sub">Стратегия достижения результата на курсе</div>
+    <div class="hero-desc">
+      Курс даст тебе столько, сколько ты возьмешь. Этот урок – про то, <strong>как именно брать</strong>: как организовать неделю, как смотреть воркшопы, что делать, если не успеваешь, и как получить максимум от экспертов.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="block">
+    <div class="section-label">01 · Формула недели</div>
+    <div class="section-title">3–5 часов, которые меняют бизнес</div>
+    <div class="section-desc">Каждая неделя устроена одинаково. Когда ты знаешь ритм – не теряешься, не копишь долги и двигаешься стабильно.</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-line"><div class="tl-dot">Пн</div><div class="tl-stem"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Воркшоп</div>
+          <div class="tl-time">~1.5–2 часа</div>
+          <div class="tl-desc">Запись открывается утром. Смотри в тот же день, пока информация свежая. Воркшоп – это не лекция, а демонстрация: эксперт решает реальную задачу, ты повторяешь у себя.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-line"><div class="tl-dot">Вт</div><div class="tl-stem"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Задание для внедрения</div>
+          <div class="tl-time">~1–1.5 часа</div>
+          <div class="tl-desc">Открой гайд модуля. Сделай задание на своем проекте – не на абстрактном примере. Отправь результат прямо в уроке. Если что-то не получается – запиши вопрос для Q&A.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-line"><div class="tl-dot">Ср</div><div class="tl-stem"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Докрутка + подготовка вопросов</div>
+          <div class="tl-time">~30 мин</div>
+          <div class="tl-desc">Доделай то, что не успел. Пересмотри сложные моменты воркшопа. Сформулируй вопрос для завтрашнего Q&A.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-line"><div class="tl-dot">Чт</div><div class="tl-stem"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Q&A + разбор workflow</div>
+          <div class="tl-time">~1–1.5 часа</div>
+          <div class="tl-desc">Живая сессия с экспертами. Разбор заданий участников, ответы на вопросы, демонстрация workflow. Не успеваешь онлайн – запись будет на следующий день.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-line"><div class="tl-dot">Пт</div></div>
+        <div class="tl-content">
+          <div class="tl-title">Отдых, общение, рефлексия</div>
+          <div class="tl-time">по желанию</div>
+          <div class="tl-desc">Выходные – для отдыха. Если есть энергия – загляни в чат, почитай кейсы других участников. Не копи материал на выходные.</div>
+        </div>
+      </div>
+    </div>
+    <div class="highlight">⏱ <strong>Итого: 3–5 часов в неделю.</strong> Это не «минимум, который нужно высидеть», а оптимум для устойчивого внедрения. Последовательность важнее интенсивности.</div>
+  </div>
+
+  <div class="block">
+    <div class="section-label">02 · Как смотреть воркшоп</div>
+    <div class="section-title">Не лекция. Тренировка.</div>
+    <div class="section-desc">Воркшоп – это не видео, которое ты «смотришь». Это инструкция, которую ты выполняешь параллельно. Разница в результате – кратная.</div>
+    <div class="two-cols">
+      <div class="col-card red">
+        <div class="col-label red">✗ Не работает</div>
+        <ul class="col-list">
+          <li><span style="color:var(--red)">✗</span> Посмотреть на 2x «для общего понимания»</li>
+          <li><span style="color:var(--red)">✗</span> Решить, что «потом разберусь»</li>
+          <li><span style="color:var(--red)">✗</span> Накопить 3 воркшопа на выходные</li>
+        </ul>
+      </div>
+      <div class="col-card green">
+        <div class="col-label green">✓ Работает</div>
+        <ul class="col-list">
+          <li><span style="color:var(--green)">✓</span> Первый просмотр на 1.5x – для картины</li>
+          <li><span style="color:var(--green)">✓</span> Второй раз – с паузами, повторяя у себя</li>
+          <li><span style="color:var(--green)">✓</span> Сразу записать, что применишь в бизнесе</li>
+        </ul>
+      </div>
+    </div>
+    <div class="materials">
+      <div class="mat-card">
+        <div class="mat-icon">📋</div>
+        <div class="mat-title">Гайд модуля</div>
+        <div class="mat-body">Пошаговая инструкция к каждому воркшопу. Структура урока, <strong>промты для копирования</strong>, чек-листы, ссылки на инструменты. Не нужно пересматривать видео, чтобы найти нужный момент – все ключевые шаги уже собраны в текстовом формате. Используй как чек-лист во время и после просмотра.</div>
+      </div>
+      <div class="mat-card">
+        <div class="mat-icon">📝</div>
+        <div class="mat-title">Транскрибация</div>
+        <div class="mat-body">Полный текст каждого воркшопа и Q&A-сессии <strong>с таймкодами</strong>. Поиск по ключевому слову, копирование точных формулировок, быстрый возврат к нужному фрагменту без перемотки видео. Особенно ценно, когда нужно вернуться к конкретному разбору или промту.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="section-label">03 · Если не успеваешь</div>
+    <div class="section-title">Не успеваешь – это нормально.</div>
+    <div class="section-desc">Если чувствуешь, что отстаешь – ты не один. Это не значит, что курс «не для тебя». Это значит, что нужно расставить приоритеты.</div>
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Задание > Q&A > пересмотр</strong>
+          <p>Если времени мало – сделай задание для внедрения. Это главное. Q&A можно посмотреть позже или пропустить. Пересматривать воркшоп целиком не обязательно.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Не копи долг</strong>
+          <p>Один пропущенный модуль – окей, догонишь. Три подряд – уже сложно. Лучше сделать задание на 70% качества вовремя, чем на 100% через две недели.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Напиши куратору</strong>
+          <p>Куратор видел десятки ситуаций и поможет расставить приоритеты. Не нужно тонуть молча – один вопрос может сэкономить часы.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Записи никуда не денутся</strong>
+          <p>Доступ к материалам останется. Даже если не успеваешь идти в ритме группы – можно вернуться и доделать после завершения потока.</p>
+        </div>
+      </div>
+    </div>
+    <div class="warn-box"><span>⚠️</span><div><strong>Главная ошибка</strong> – перестать заходить на платформу, потому что «уже отстал». Даже 20 минут в неделю на один блок гайда – лучше, чем ноль.</div></div>
+  </div>
+
+  <div class="block">
+    <div class="section-label">04 · Как использовать Q&A</div>
+    <div class="section-title">Твой вопрос = твой результат</div>
+    <div class="section-desc">Q&A – живой разбор с экспертами. Чем точнее вопрос, тем ценнее ответ.</div>
+    <div class="manifesto">
+      <div class="manifesto-item"><span class="mdot">▸</span><div><strong>Готовь вопрос заранее.</strong> Запиши его во вторник-среду, пока делаешь задание. Идеальная формула: «Я сделал X, получил Y, ожидал Z – что не так?»</div></div>
+      <div class="manifesto-item"><span class="mdot">▸</span><div><strong>Задавай вопросы по текущему модулю.</strong> Вопросы из будущих тем сбивают и тебя, и других участников. Если не терпится – запиши и задай, когда дойдешь.</div></div>
+      <div class="manifesto-item"><span class="mdot">▸</span><div><strong>Слушай чужие разборы.</strong> Даже если вопрос не твой – ответ часто применим к твоей ситуации. Лучшие инсайты приходят из чужих кейсов.</div></div>
+      <div class="manifesto-item"><span class="mdot">▸</span><div><strong>Не успеваешь онлайн?</strong> Запись появляется на следующий день. Можно смотреть на 1.5x, останавливаясь на интересных разборах.</div></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="section-label">05 · Поддержка на борту</div>
+    <div class="section-title">Твои союзники</div>
+    <div class="section-desc">На курсе тебя сопровождают координатор и куратор. У каждого своя зона – вместе они закрывают все вопросы, от «не могу зайти на платформу» до «как докрутить мой AI-воркфлоу».</div>
+
+    <div class="two-cols">
+      <div class="col-card" style="background:var(--bg-card); border:1px solid var(--border); box-shadow:var(--shadow-sm);">
+        <div style="font-size:24px; margin-bottom:10px;">🧭</div>
+        <div class="card-title">Координатор</div>
+        <div class="card-body" style="margin-bottom:14px;">Твой первый контакт на курсе. Помогает с организационными и техническими вопросами, следит за тем, чтобы ты не потерялся.</div>
+        <div style="font-size:12.5px; color:var(--text-mid); line-height:1.6;">
+          <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;"><span style="color:var(--accent)">→</span> Доступ к платформе, вход, навигация</div>
+          <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;"><span style="color:var(--accent)">→</span> Технические сбои и вопросы по интерфейсу</div>
+          <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;"><span style="color:var(--accent)">→</span> Расписание, записи, организация обучения</div>
+          <div style="display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--accent)">→</span> Апгрейд формата участия</div>
+        </div>
+      </div>
+      <div class="col-card" style="background:var(--bg-card); border:1px solid var(--border); box-shadow:var(--shadow-sm);">
+        <div style="font-size:24px; margin-bottom:10px;">🎯</div>
+        <div class="card-title">Куратор</div>
+        <div class="card-body" style="margin-bottom:14px;">Эксперт, который разбирается в содержании курса. Помогает с заданиями, инструментами и внедрением в бизнес.</div>
+        <div style="font-size:12.5px; color:var(--text-mid); line-height:1.6;">
+          <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;"><span style="color:var(--accent)">→</span> Вопросы по материалам и заданиям</div>
+          <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;"><span style="color:var(--accent)">→</span> «Не получается» – разбор конкретного кейса</div>
+          <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px;"><span style="color:var(--accent)">→</span> Помощь с настройкой инструментов и промтов</div>
+          <div style="display:flex; gap:8px; align-items:flex-start;"><span style="color:var(--accent)">→</span> Рекомендации по внедрению в твой бизнес</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 12px;">
+      <div class="card-title">Как писать</div>
+      <div class="card-body">Конкретно. Вместо «у меня ничего не работает» – «я создал ассистента в Claude, но он не видит прикрепленные файлы». Скриншот ускоряет решение в 3 раза. Не нужно думать, кому именно писать – напиши любому, и вопрос попадет к нужному человеку.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Когда на связи</div>
+      <div class="card-body">Пн–Пт, 10:00–19:00 по Киеву. На выходных – только срочные вопросы. Среднее время ответа – в течение нескольких часов.</div>
+    </div>
+
+    <div class="note" style="margin-top: 12px;"><span>📲</span><div>Куратор на связи: <strong>@kuratoraikovcheg</strong></div></div>
+
+    <div class="highlight" style="margin-top: 20px;">
+      💡 <strong>Ты на тарифе «Наблюдатель»?</strong> Ты можешь в любой момент сделать апгрейд до «Участника» – получить доступ к Q&A, заданиям, куратору и комьюнити. А если хочешь персональную работу с экспертами – можно пойти еще дальше и присоединиться к закрытым фокус-группам. Пиши куратору – он расскажет про условия.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="quote-big">
+    <div class="qtext">Те, кто получат максимум – не самые умные. А те, кто делал – даже когда было непонятно.</div>
+    <div class="qsub">Следующий шаг – заполни Персональную карту обучения. Она поможет поставить конкретные цели на каждый модуль.</div>
+  </div>
+
+  <div class="confidential">
+    <em class="lock">🔒</em> Все материалы курса предназначены только для участников AI-Ковчега.<br>Передача записей, гайдов и транскрибаций третьим лицам – нарушение правил обучения.
+  </div>
+
+  <div class="footer" style="margin-top: 48px;">
+    <div class="footer-brand">AI·КОВЧЕГ</div>
+    <div class="footer-meta">Перед стартом · Стратегия достижения результата</div>
+  </div>
+
+</div>
+</body>
+</html>
