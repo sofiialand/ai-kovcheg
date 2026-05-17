@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Ковчег — Найди свой модуль</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafafa;--bg-card:#fff;--bg-soft:#f3f4f6;--bg-warm:#fffbf0;--border:rgba(0,0,0,.06);--border-hover:rgba(0,0,0,.12);--text:#1a1a2e;--text-mid:#52556a;--text-dim:#9096a8;--accent:#d97706;--accent-light:#f59e0b;--accent-bg:rgba(217,119,6,.07);--accent-border:rgba(217,119,6,.2);--green:#16a34a;--green-bg:rgba(22,163,74,.06);--green-border:rgba(22,163,74,.18);--blue:#2563eb;--blue-bg:rgba(37,99,235,.06);--blue-border:rgba(37,99,235,.18);--purple:#7c3aed;--purple-bg:rgba(124,58,237,.06);--purple-border:rgba(124,58,237,.18);--shadow-sm:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.03);--shadow-md:0 4px 12px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.04);--radius:14px}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;font-size:15px;line-height:1.68;min-height:100vh;-webkit-font-smoothing:antialiased}
+.page{max-width:760px;margin:0 auto;padding:56px 28px 100px}
+.hero{margin-bottom:48px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:999px;background:var(--accent-bg);border:1px solid var(--accent-border);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
+.hero-badge i{width:5px;height:5px;border-radius:50%;background:var(--accent-light);display:block}
+h1.hero-title{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(28px,6vw,44px);line-height:1.05;color:var(--text);letter-spacing:-.025em;margin-bottom:6px}
+h1.hero-title em{font-style:normal;color:var(--accent)}
+.hero-sub{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:20px}
+.hero-desc{font-size:15.5px;color:var(--text-mid);line-height:1.75;max-width:600px}
+.progress-bar{display:flex;gap:6px;margin-bottom:40px}
+.progress-seg{flex:1;height:4px;border-radius:2px;background:var(--border);transition:background .4s}
+.progress-seg.active{background:var(--accent)}.progress-seg.done{background:var(--green)}
+.step-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.step-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.step-question{font-family:'Unbounded',sans-serif;font-weight:800;font-size:clamp(18px,3vw,24px);color:var(--text);line-height:1.2;margin-bottom:8px;letter-spacing:-.015em}
+.step-hint{font-size:14px;color:var(--text-dim);margin-bottom:24px;line-height:1.65}
+.options{display:flex;flex-direction:column;gap:8px}
+.option-btn{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow-sm);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;text-align:left;font-family:'Manrope',sans-serif;font-size:14.5px;color:var(--text);line-height:1.5;position:relative;overflow:hidden}
+.option-btn:hover{border-color:var(--accent-border);box-shadow:var(--shadow-md);background:var(--bg-warm)}
+.option-btn.selected{border-color:var(--accent);background:var(--accent-bg)}
+.option-btn.selected::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--accent)}
+.option-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--bg-soft);border:1px solid var(--border)}
+.option-btn.selected .option-icon{background:var(--accent-bg);border-color:var(--accent-border)}
+.option-text{flex:1}.option-text strong{display:block;font-weight:700;font-size:14px;margin-bottom:2px}.option-text span{font-size:12.5px;color:var(--text-dim)}
+.nav-row{display:flex;gap:12px;margin-top:32px}
+.nav-btn{padding:12px 28px;border-radius:10px;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;border:none}
+.nav-btn.back{background:var(--bg-soft);color:var(--text-mid);border:1px solid var(--border)}.nav-btn.back:hover{background:var(--border)}
+.nav-btn.next{background:var(--accent);color:#fff;flex:1}.nav-btn.next:hover{background:#b45309}.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.result-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow-md);margin-bottom:24px;position:relative;overflow:hidden}
+.result-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--green),var(--blue))}
+.result-tag{display:inline-flex;padding:4px 12px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.result-tag.module{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.result-tag.green-tag{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.result-title{font-family:'Unbounded',sans-serif;font-weight:800;font-size:17px;color:var(--text);margin-bottom:12px;line-height:1.3}
+.result-body{font-size:14px;color:var(--text-mid);line-height:1.75}
+.mod-section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.mod-section-label.blue-l{color:var(--blue)}
+.mod-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.mod-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+.mod-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--accent)}
+.mod-card.foundation::before{background:var(--blue)}
+.mod-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.mod-num{width:36px;height:36px;border-radius:50%;background:var(--accent-bg);border:1.5px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0}
+.mod-card.foundation .mod-num{background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)}
+.mod-header-text{flex:1}
+.mod-header-text strong{font-family:'Unbounded',sans-serif;font-weight:800;font-size:13.5px;color:var(--text);display:block;line-height:1.3}
+.mod-header-text .mod-time{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-dim);margin-top:2px}
+.mod-do{background:var(--bg-soft);border-radius:10px;padding:14px 18px;margin-bottom:10px}
+.mod-do-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+.mod-do p{font-size:13.5px;color:var(--text-mid);line-height:1.7}
+.mod-how{background:var(--bg-warm);border-radius:10px;padding:14px 18px}
+.mod-how-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.mod-how p{font-size:13px;color:var(--text-dim);line-height:1.65}
+.roadmap{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;margin-bottom:20px}
+.roadmap-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.roadmap-steps{display:flex;flex-direction:column}
+.roadmap-step{display:flex;align-items:flex-start;gap:14px;position:relative;padding-bottom:16px}
+.roadmap-step:last-child{padding-bottom:0}
+.roadmap-line{width:28px;display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.roadmap-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;z-index:1;flex-shrink:0}
+.roadmap-dot.amber{background:var(--accent-bg);border:1.5px solid var(--accent-border);color:var(--accent)}
+.roadmap-dot.blue-d{background:var(--blue-bg);border:1.5px solid var(--blue-border);color:var(--blue)}
+.roadmap-stem{width:1.5px;flex:1;background:var(--border);margin-top:4px;min-height:12px}
+.roadmap-step:last-child .roadmap-stem{display:none}
+.roadmap-text{flex:1;padding-top:4px}
+.roadmap-text strong{font-size:13px;color:var(--text);display:block;margin-bottom:1px}
+.roadmap-text span{font-size:12px;color:var(--text-dim)}
+.case-box{background:var(--bg-warm);border:1px solid var(--accent-border);border-radius:12px;padding:18px 22px;margin-bottom:8px}
+.case-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.case-text{font-size:13.5px;color:var(--text-mid);line-height:1.7}
+.restart-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:10px;background:var(--accent);color:#fff;font-family:'Manrope',sans-serif;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:background .2s;margin-top:24px}
+.restart-btn:hover{background:#b45309}
+.fade-in{animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){.page{padding:36px 18px 80px}.option-btn{padding:14px 16px}.mod-card{padding:18px 16px}}
+</style>
+</head>
+<body>
+<div class="page" id="app">
+  <div class="hero">
+    <div class="hero-badge"><i></i> Интерактивный квиз</div>
+    <h1 class="hero-title">Как AI решит <em>твою</em> задачу?</h1>
+    <div class="hero-sub">AI-Ковчег · персональные решения</div>
+    <p class="hero-desc">Выбирай свои нишу, роль и задачу и получи конкретный план: что ты сделаешь, за счет чего, на каком этапе, и еще увидишь реальные примеры – что уже получилось у участников из похожей ниши.</p>
+  </div>
+  <div class="progress-bar" id="progress"></div>
+  <div id="quiz-body"></div>
+</div>
+<script>
+// === STEP 1: MARKETS ===
+const MARKETS = [
+  {id:'services',icon:'🏢',name:'Сфера услуг',desc:'Бьюти, консалтинг, медицина, образование, IT'},
+  {id:'production',icon:'🏭',name:'Производство',desc:'Собственное, промышленное, агро'},
+  {id:'trade',icon:'🛒',name:'Торговля',desc:'Интернет-магазин, офлайн, ритейл'},
+  {id:'other',icon:'✦',name:'Другое',desc:'Ивенты, медиа, недвижимость'},
+];
+
+// === STEP 2: NICHES BY MARKET ===
+const NICHES = {
+  services: [
+    {id:'beauty',icon:'💅',name:'Бьюти-индустрия',desc:'Салон красоты, студия маникюра, парикмахерская'},
+    {id:'horeca',icon:'🏨',name:'HoReCa',desc:'Отель, ресторан, кафе, кейтеринг'},
+    {id:'biz_services',icon:'💼',name:'Услуги для бизнеса',desc:'Консалтинг, финансы, бухгалтерия, юриспруденция'},
+    {id:'it',icon:'💻',name:'IT',desc:'Разработка ПО, веб-дизайн, IT-аутсорсинг'},
+    {id:'creative',icon:'🎨',name:'Креативная индустрия',desc:'Маркетинговое агентство, фото/видео, дизайн'},
+    {id:'education',icon:'📚',name:'Образование',desc:'Курсы, школы, тренинги'},
+    {id:'medical',icon:'🏥',name:'Медицина и здоровье',desc:'Частные клиники, стоматология, лаборатории'},
+    {id:'logistics',icon:'🚛',name:'Логистика и перевозки',desc:'Грузоперевозки, курьерские службы'},
+    {id:'construction',icon:'🏗',name:'Архитектура и строительство',desc:'Проектирование, ремонт, стройматериалы'},
+    {id:'realty_s',icon:'🏠',name:'Недвижимость',desc:'Агентства, управление имуществом'},
+    {id:'tourism',icon:'✈️',name:'Туризм',desc:'Турагентства, путешествия, экскурсии'},
+  ],
+  production: [
+    {id:'own_prod',icon:'🧵',name:'Собственное производство',desc:'Одежда, мебель, крафт, свечи'},
+    {id:'industrial',icon:'🏭',name:'Промышленное производство',desc:'Заводы, фабрики'},
+    {id:'agro',icon:'🌾',name:'Агропромышленный комплекс',desc:'Сельское хозяйство, продукты питания'},
+  ],
+  trade: [
+    {id:'ecom',icon:'🛒',name:'Интернет-магазин',desc:'Без собственного производства'},
+    {id:'offline_shop',icon:'🏪',name:'Офлайн-магазин или сеть',desc:'Торговые точки, шоурумы'},
+    {id:'retail',icon:'🛍',name:'Ритейл',desc:'Продуктовые сети, магазины одежды'},
+  ],
+  other: [
+    {id:'realty_o',icon:'🏠',name:'Недвижимость',desc:'Продажа, аренда, управление'},
+    {id:'events',icon:'🎉',name:'Ивенты и развлечения',desc:'Праздники, концерты, вечеринки'},
+    {id:'media',icon:'📰',name:'Медиа и издательство',desc:'Онлайн-медиа, продакшн'},
+  ],
+};
+
+// === STEP 3: ROLES ===
+const ROLES = [
+  {id:'owner',icon:'👑',name:'Собственник бизнеса',desc:'Принимаю ключевые решения, строю компанию'},
+  {id:'director',icon:'📊',name:'Руководитель / Директор',desc:'Управляю командой или направлением'},
+  {id:'freelancer',icon:'🚀',name:'Фрилансер / Соло',desc:'Работаю на себя, все процессы на мне'},
+  {id:'expert',icon:'🎯',name:'Эксперт / Специалист',desc:'Работаю в компании, хочу усилить свою экспертизу и создавать более крутые результаты'},
+  {id:'starter',icon:'🌱',name:'Только начинаю',desc:'Ищу нишу, идею, первый продукт'},
+];
+
+// === STEP 4: PAINS (16) ===
+const PAINS = [
+  {id:'routine',icon:'⏰',name:'Рутина сжирает время',desc:'Не остается времени на стратегию и рост'},
+  {id:'bottleneck',icon:'🧠',name:'Все замыкается на мне',desc:'Не могу отойти от бизнеса, все рушится без меня'},
+  {id:'team_cost',icon:'💸',name:'Плачу людям за то, что может AI',desc:'ФОТ сжирает маржу, хочу оптимизировать'},
+  {id:'sales',icon:'📉',name:'Продажи упали или стоят',desc:'Клиенты дольше думают, реклама не окупается'},
+  {id:'ceiling',icon:'📈',name:'Бизнес уперся в потолок',desc:'Оборот есть, прибыли нет, расту линейно'},
+  {id:'vendors',icon:'💰',name:'Трачу на подрядчиков без результата',desc:'Сайт, реклама, SMM – деньги уходят, толку ноль'},
+  {id:'audience',icon:'🎯',name:'Не понимаю свою аудиторию',desc:'Оффер не конвертит, не знаю кому продавать'},
+  {id:'competitors',icon:'🔍',name:'Конкуренты обгоняют',desc:'Не вижу своих преимуществ на рынке'},
+  {id:'packaging',icon:'📦',name:'Нет упаковки',desc:'Нет сайта, лендинга, презентации – нечего показать клиенту'},
+  {id:'ai_noob',icon:'🤖',name:'Не понимаю AI и боюсь отстать',desc:'Все внедряют, а я не знаю с чего начать'},
+  {id:'ai_bad',icon:'🛠',name:'Пробовал ChatGPT – не впечатлило',desc:'Получаю воду и шаблоны, не понимаю как получить результат'},
+  {id:'new_product',icon:'💡',name:'Хочу запустить новый продукт',desc:'Есть идея, но не знаю есть ли спрос и с чего начать'},
+  {id:'content',icon:'📱',name:'Контент – хаос',desc:'Посты нерегулярно, нет стратегии, не знаю что публиковать'},
+  {id:'slow_text',icon:'✍️',name:'Трачу часы на тексты и документы',desc:'Письма, КП, посты – все вручную, медленно'},
+  {id:'dev_dep',icon:'🧩',name:'Зависим от разработчиков',desc:'Любое изменение – ждать и платить'},
+  {id:'no_strategy',icon:'🧭',name:'Нет стратегии, двигаюсь наощупь',desc:'Решения на интуиции, не вижу полной картины рынка'},
+];
+
+// === MODULE TEMPLATES ===
+const M = {
+  m01: {num:'01',name:'Боевой стек нейронок',color:'accent'},
+  m02: {num:'02',name:'AI-мышление и промтинг',color:'blue'},
+  m03: {num:'03',name:'Цифровые сотрудники',color:'accent'},
+  m04: {num:'04',name:'Deep Research',color:'accent'},
+  m05: {num:'05',name:'Упаковка: ДНК клиента + оффер',color:'accent'},
+  m06: {num:'06',name:'Сайт за вечер',color:'accent'},
+  m07: {num:'07',name:'AI-агенты: автоматизация 24/7',color:'accent'},
+  m08: {num:'08',name:'Вайб-кодинг: приложения и MVP',color:'accent'},
+  m09: {num:'09',name:'Контент-машина (бонус)',color:'accent'},
+};
+
+// === RESULTS: pain → {title, body, foundation, modules[], roadmap[], case_key} ===
+const RESULTS = {
+  routine: {
+    title:'Делегируй рутину AI-сотрудникам',
+    body:'Создаешь AI-ассистентов под конкретные процессы, потом связываешь их в автоматические цепочки через AI-агентов. Результат – 10-20 часов в неделю возвращаются тебе на стратегию.',
+    modules:[
+      {m:M.m03, do:'Создашь 3-5 AI-ассистентов под свои повторяющиеся задачи: ответы клиентам, подготовка документов, анализ данных. Каждый ассистент помнит контекст твоего бизнеса и работает по твоим стандартам.',how:'Скиллы и Projects в Claude + MCP-интеграции с твоими сервисами. Ассистент создается за 20-30 минут.', time:'~2-4 часа на 3 ассистентов'},
+      {m:M.m07, do:'Свяжешь ассистентов в автоматические цепочки: утренний брифинг, сбор отзывов, еженедельный отчет – все работает по расписанию, пока ты спишь.',how:'OpenClaw + cron-задачи + Telegram-интеграции. Агенты с памятью и проактивным действием.', time:'~1 день на настройку'},
+      {m:M.m01, do:'Настроишь инфраструктуру: 10+ нейронок под разные задачи + голосовой ввод, чтобы ставить задачи голосом быстрее, чем печатать.',how:'Мульти-модельный подход (Claude, GPT, Gemini, Perplexity) + Wispr Flow для голосового ввода.', time:'~1-2 часа'},
+    ],
+  },
+  bottleneck: {
+    title:'Построй систему, которая работает без тебя',
+    body:'Проблема не в бизнесе – проблема в том, что ты и есть бизнес. AI-сотрудники забирают операционку, агенты работают 24/7, а внутренние инструменты заменяют ручное управление.',
+    modules:[
+      {m:M.m03, do:'Создашь цифровых сотрудников, которые закроют задачи, на которых ты застреваешь каждый день: контроль качества, общение с клиентами, подготовка отчетов.',how:'AI-ассистенты на 4 платформах (Claude, GPT, Gemini, NotebookLM) со скиллами и памятью.', time:'~2-4 часа'},
+      {m:M.m07, do:'Настроишь агентов, которые работают проактивно: напоминания, утренние сводки, автоответы – бизнес продолжает крутиться, даже если ты в отпуске.',how:'OpenClaw + 25 000 скиллов + cron-расписание. Агент сам пишет письма, отвечает в Telegram.', time:'~1 день'},
+      {m:M.m08, do:'Соберешь внутренние инструменты: дашборд, мини-CRM, трекер задач – то, что раньше жило в твоей голове, теперь живет в системе.',how:'Вайб-кодинг через Claude Code + GitHub + деплой. Без навыков программирования.', time:'~1-2 дня'},
+    ],
+  },
+  team_cost: {
+    title:'Замени $3-5K на команду на $20/мес',
+    body:'AI-ассистенты и агенты забирают задачи, за которые ты сейчас платишь людям – от аналитики до контента и мониторинга.',
+    modules:[
+      {m:M.m03, do:'Создашь 3-5 AI-ассистентов, которые заменят или усилят роли: аналитик, копирайтер, менеджер по отзывам, ассистент по документам.',how:'Кастомные ассистенты со скиллами + MCP-протокол для подключения к сервисам бизнеса.', time:'~2-4 часа'},
+      {m:M.m07, do:'Настроишь агентов с расписанием: ежедневный сбор данных, мониторинг конкурентов, автоотчеты – все, что делал джуниор-сотрудник.',how:'OpenClaw + Telegram + cron. Агенты с памятью, работают 24/7.', time:'~1 день'},
+      {m:M.m02, do:'Научишься декомпозировать процессы так, чтобы AI мог их выполнять. Без этого навыка ассистенты дают воду, с ним – точный результат.',how:'Промтинг, мета-промтинг, адвокат дьявола. Навык ставить задачу так, чтобы AI давал результат.', time:'~2-3 часа практики'},
+    ],
+  },
+  sales: {
+    title:'Запусти контент-машину и привлекай клиентов',
+    body:'Из одной идеи – 16 форматов контента для всех площадок. Плюс конверсионный лендинг с калькуляторами и боты для обработки лидов.',
+    modules:[
+      {m:M.m09, do:'Построишь систему, которая из одной идеи генерирует контент-план на месяц: посты, reels-скрипты, статьи, email-цепочки – 16 форматов за 30 минут.',how:'Контент-машина: 1 тема → 16 адаптаций + VSL-скрипты + квиз-воронки.', time:'~2-4 часа на первый цикл'},
+      {m:M.m06, do:'Сделаешь лендинг, который продает: с калькулятором окупаемости, квиз-воронкой и формой заявки. Опубликуешь бесплатно.',how:'Вайб-кодинг + Claude Code + деплой через Vercel за 2 минуты.', time:'~2-4 часа'},
+      {m:M.m08, do:'Соберешь Telegram-бота для автоответов и обработки лидов – клиенты получают мгновенный ответ, ты получаешь заявки.',how:'GitHub + вайб-кодинг. Бот с каталогом, бронированием, FAQ.', time:'~1 день'},
+    ],
+  },
+  ceiling: {
+    title:'Пробей потолок: стратегия на данных + автоматизация',
+    body:'Потолок – это когда решения принимаются на интуиции, а процессы держатся на людях. Deep Research дает данные для стратегии, агенты забирают операционку.',
+    modules:[
+      {m:M.m04, do:'Проведешь полный анализ: рынок, аудитория, конкуренты – 15 исследований за раз. Найдешь, где деньги, какие боли не закрыты, куда расти.',how:'Мета-промтинг + мультивселенная промтов в 5 нейронок + NotebookLM как база без галлюцинаций. До 300 источников.', time:'~1 день на полный цикл'},
+      {m:M.m07, do:'Автоматизируешь процессы, которые привязывают тебя к операционке: отчеты, мониторинг, коммуникации.',how:'OpenClaw + агенты с cron-расписанием + интеграции с Telegram и почтой.', time:'~1 день'},
+      {m:M.m08, do:'Создашь внутренние инструменты: дашборд план vs факт, CRM, трекер заказов – все, что нужно для управления ростом.',how:'Вайб-кодинг через Claude Code + GitHub. Без программирования.', time:'~1-2 дня'},
+    ],
+  },
+  vendors: {
+    title:'Сделай сам то, за что платишь подрядчикам',
+    body:'Лендинг, оффер, контент – все это ты создаешь сам за часы, а не за недели и тысячи долларов. И контролируешь результат.',
+    modules:[
+      {m:M.m05, do:'Построишь оффер на данных о своей аудитории: портрет ЦА, боли, возражения, язык клиента – и упакуешь в предложение, от которого сложно отказаться.',how:'ДНК клиента (5-частная инструкция) + оффер по методологии Хормози + HTML-прототип лендинга.', time:'~4-6 часов'},
+      {m:M.m06, do:'Сделаешь лендинг с дизайном, интерактивами и AI-виджетами – и опубликуешь бесплатно. Больше не зависишь от веб-студии.',how:'Вайб-кодинг + Claude Code + деплой Vercel. 4-6 лендингов за полтора часа суммарно.', time:'~2-4 часа'},
+      {m:M.m09, do:'Запустишь контент-машину: 1 идея → 16 форматов. Больше не нужен SMM-менеджер для базового контент-плана.',how:'Контент-машина + VSL-видео + квиз-воронки. Все из одного промта.', time:'~2-4 часа'},
+    ],
+  },
+  audience: {
+    title:'Узнай свою аудиторию лучше, чем она сама',
+    body:'Deep Research дает данные, которые раньше стоили $2-10K в агентстве. А ДНК Клиента превращает их в точный портрет – с реальными болями, возражениями и языком твоих клиентов.',
+    modules:[
+      {m:M.m04, do:'Запустишь 3 промта в 5 нейронок параллельно и получишь полную картину: кто твои клиенты, чего боятся, какими словами думают, что делают конкуренты.',how:'Мета-промтинг + мультивселенная (15 исследований за раз) + NotebookLM как база без галлюцинаций. До 300 источников.', time:'~1 день на полный цикл'},
+      {m:M.m05, do:'Загрузишь данные исследования в ассистента ДНК клиента – и получишь детальный портрет ЦА из 5 частей: идентичность, боли, барьеры, драйверы, язык.',how:'ДНК клиента v2 (5-частная инструкция в Claude Projects) + данные из Deep Research + CustDev-анкета.', time:'~4-6 часов'},
+      {m:M.m05, do:'Упакуешь все в оффер по методологии Хормози: обещание, которое закрывает главную боль, и прототип лендинга по 10-блочной структуре.',how:'Оффер по Хормози + hunt-ladder + HTML-прототип.', time:'~2-3 часа'},
+    ],
+  },
+  competitors: {
+    title:'Найди слепые зоны конкурентов',
+    body:'GAP-анализ через Deep Research покажет, что делают все конкуренты, а что не делает никто – и где твой голубой океан.',
+    modules:[
+      {m:M.m04, do:'Проведешь GAP-анализ: загрузишь данные о рынке, аудитории и конкурентах в NotebookLM и найдешь боли, которые конкуренты игнорируют.',how:'Трилема бизнеса (голос рынка + аудитории + конкурентов) + допрос в NotebookLM. До 300 источников с верифицированными ссылками.', time:'~1 день'},
+      {m:M.m05, do:'Создашь оффер, который отстраивает от конкурентов: уникальное обещание на базе найденных гэпов + прототип лендинга.',how:'Оффер по Хормози + ДНК клиента + HTML-прототип по 10-блочной структуре.', time:'~4-6 часов'},
+      {m:M.m03, do:'Настроишь ассистента для регулярного мониторинга: цены конкурентов, новые предложения, изменения на рынке.',how:'AI-ассистент в Claude Projects со скиллом мониторинга + MCP для подключения к источникам.', time:'~1-2 часа'},
+    ],
+  },
+  packaging: {
+    title:'Упакуй продукт за вечер',
+    body:'Лендинг, презентация, калькулятор, квиз-воронка – все создается за 2-4 часа через вайб-кодинг. Без дизайнеров, разработчиков и бюджетов.',
+    modules:[
+      {m:M.m06, do:'Сделаешь лендинг с дизайном, интерактивами и AI-виджетами. Опубликуешь бесплатно на Vercel – рабочая ссылка за 2 минуты.',how:'Вайб-кодинг через Claude Code. Навык позволяет делать 4-6 лендингов за полтора часа.', time:'~2-4 часа'},
+      {m:M.m05, do:'Перед лендингом построишь текстовый прототип: структура из 10 блоков на базе ДНК клиента и оффера по Хормози.',how:'ДНК клиента → оффер → hunt-ladder → HTML-прототип. Все в Claude Projects.', time:'~4-6 часов'},
+      {m:M.m09, do:'Добавишь VSL-видео, квиз-воронку и контент для соцсетей – полный пакет упаковки из одного промта.',how:'Контент-машина: 1 тема → 16 форматов + VSL-скрипт + квиз.', time:'~2-4 часа'},
+    ],
+  },
+  ai_noob: {
+    title:'Начни с фундамента: стек + мышление',
+    body:'Не нужно разбираться во всем сразу. Начни с правильного набора инструментов и навыка ставить задачи AI – дальше все встанет на место.',
+    modules:[
+      {m:M.m01, do:'Настроишь боевой стек: 10+ нейронок, каждая под свою задачу. Поймешь, какая для чего, и перестанешь использовать только ChatGPT.',how:'Claude, GPT, Gemini, Perplexity, NotebookLM, Grok, Google AI Studio + Wispr Flow для голосового ввода + Comet Browser.', time:'~1-2 часа'},
+      {m:M.m02, do:'Освоишь AI-мышление: как ставить задачу так, чтобы AI давал результат, а не воду. Промтинг, декомпозиция, мета-промтинг, адвокат дьявола.',how:'4 тренажера: постановка задачи (SMART для AI), архитектура контекста, мета-промтинг, итеративная доработка.', time:'~2-3 часа практики'},
+      {m:M.m03, do:'Создашь своего первого AI-ассистента под конкретную задачу бизнеса – и увидишь разницу между «поболтать с ChatGPT» и «получить результат».',how:'Claude Projects + скиллы + инструкции. Ассистент с памятью и контекстом твоего бизнеса.', time:'~30 минут'},
+    ],
+  },
+  ai_bad: {
+    title:'От «ChatGPT дает воду» к точным результатам',
+    body:'Проблема не в нейронке – проблема в том, как ты ставишь задачу. AI-мышление + кастомные ассистенты = совсем другой уровень результатов.',
+    modules:[
+      {m:M.m02, do:'Поймешь, почему AI дает шаблонные ответы, и научишься получать точные: декомпозиция задачи, правильный контекст, мета-промтинг.',how:'4 тренажера + принцип: не искать «идеальный промт», а научиться генерировать их под любую задачу.', time:'~2-3 часа'},
+      {m:M.m03, do:'Создашь кастомных ассистентов, которые знают твой бизнес, помнят контекст и работают по твоим стандартам – вместо общего чата.',how:'Claude Projects + скиллы + MCP-интеграции. Ассистент = схантированный сотрудник, который уже обучен.', time:'~2-4 часа на 3 ассистентов'},
+      {m:M.m04, do:'Увидишь Deep Research в действии: одна задача → 15 исследований → NotebookLM для допроса данных. Совсем другой уровень.',how:'Мультивселенная промтов + NotebookLM. Результат, который невозможно получить обычным чатом.', time:'~1 день'},
+    ],
+  },
+  new_product: {
+    title:'От идеи до MVP за выходные',
+    body:'Deep Research покажет, есть ли спрос. Оффер по Хормози упакует продукт. Вайб-кодинг создаст рабочий прототип.',
+    modules:[
+      {m:M.m04, do:'Проверишь идею на данных: объем рынка, спрос, конкуренты, незакрытые боли. Не на интуиции – на 300 источниках.',how:'Мета-промтинг + мультивселенная + NotebookLM. GAP-анализ и синтез прорывного продукта.', time:'~1 день'},
+      {m:M.m05, do:'Упакуешь продукт: портрет ЦА, ключевая боль, оффер, прототип лендинга по 10-блочной структуре.',how:'ДНК клиента + оффер по Хормози + hunt-ladder + HTML-прототип.', time:'~4-6 часов'},
+      {m:M.m08, do:'Соберешь рабочий MVP: сайт с личным кабинетом, бот, приложение – от идеи до деплоя за выходные.',how:'Вайб-кодинг через Claude Code + GitHub + деплой. Без навыков программирования.', time:'~1-2 дня'},
+    ],
+  },
+  content: {
+    title:'Построй контент-систему, а не хаос',
+    body:'Из одной темы – 16 форматов контента для всех площадок. Плюс стратегия на базе данных о твоей аудитории.',
+    modules:[
+      {m:M.m09, do:'Построишь контент-машину: 1 тема → посты, reels, статьи, email-цепочки, VSL-скрипты – 16 форматов за 30 минут. Контент-план на месяц.',how:'Контент-машина + VSL-формула + квиз-воронки. Все из одного промта.', time:'~2-4 часа на первый цикл'},
+      {m:M.m05, do:'Перед контентом поймешь, о чем говорить: ДНК клиента даст реальный язык аудитории, их боли и триггеры.',how:'ДНК клиента v2 – 5-частный портрет ЦА. Контент строится на данных, а не на догадках.', time:'~4-6 часов'},
+      {m:M.m07, do:'Автоматизируешь постинг и дистрибуцию: агент сам публикует контент по расписанию.',how:'OpenClaw + cron + Telegram-интеграции.', time:'~2-4 часа'},
+    ],
+  },
+  slow_text: {
+    title:'Ускорь работу с текстами в 5-10 раз',
+    body:'Голосовой ввод + правильный промтинг = тексты, письма, КП и документы за минуты вместо часов.',
+    modules:[
+      {m:M.m01, do:'Настроишь голосовой ввод: говоришь – текст появляется. Письма, задачи, заметки – голосом быстрее, чем печатать.',how:'Wispr Flow (или MacWhisper для Mac) + мульти-модельный подход: разные нейронки для разных типов текстов.', time:'~1-2 часа'},
+      {m:M.m02, do:'Освоишь промтинг для текстов: как получить не шаблон, а точный результат с первого раза. КП, письмо клиенту, пост – за 2 минуты.',how:'Архитектура контекста + мета-промтинг + итеративная доработка. Навык, который работает в любой нейронке.', time:'~2-3 часа практики'},
+      {m:M.m03, do:'Создашь ассистента-копирайтера, который знает твой Tone of Voice, стиль и аудиторию – и пишет как ты, только быстрее.',how:'Claude Projects + скилл Tone of Voice + примеры твоих текстов как контекст.', time:'~1 час'},
+    ],
+  },
+  dev_dep: {
+    title:'Делай сам то, за что платил разработчику',
+    body:'Сайт, бот, приложение, дашборд – все это ты создаешь сам через вайб-кодинг. Без кода, без разработчика, без ожидания.',
+    modules:[
+      {m:M.m06, do:'Сделаешь лендинг с нуля: дизайн, интерактивы, AI-виджеты, деплой – за 2-4 часа. Навык на 4-6 лендингов за полтора часа.',how:'Вайб-кодинг + Claude Code + деплой Vercel. Говоришь, что хочешь – AI пишет код.', time:'~2-4 часа'},
+      {m:M.m08, do:'Соберешь приложение: Telegram-бот, дашборд, мини-CRM, калькулятор – все, что раньше стоило $3-10K у разработчика.',how:'GitHub + Claude Code + вайб-кодинг. MVP от идеи до деплоя за выходные.', time:'~1-2 дня'},
+      {m:M.m07, do:'Подключишь автоматизацию: бот отвечает клиентам, собирает заявки, отправляет напоминания – без разработчика.',how:'OpenClaw + Telegram + cron-задачи. No-code автоматизация процессов.', time:'~1 день'},
+    ],
+  },
+  no_strategy: {
+    title:'Принимай решения на данных, а не на интуиции',
+    body:'Трилема бизнеса: голос рынка + голос аудитории + голос конкурентов. Deep Research собирает все три за день, а AI-мышление помогает из данных делать решения.',
+    modules:[
+      {m:M.m04, do:'Проведешь полный цикл исследования: рынок (тренды, объем, риски), аудитория (боли, барьеры, язык), конкуренты (что делают, что не делают).',how:'Мета-промтинг + мультивселенная промтов в 5 нейронок + NotebookLM для «допроса» данных. До 300 источников.', time:'~1 день'},
+      {m:M.m02, do:'Научишься декомпозировать стратегические задачи для AI: не «сделай мне стратегию», а точная последовательность вопросов, которая дает результат.',how:'AI-мышление: декомпозиция, адвокат дьявола, мета-промтинг. Скорость мышления = конкурентное преимущество.', time:'~2-3 часа'},
+      {m:M.m05, do:'На базе данных построишь оффер и позиционирование: кому продаешь, какую боль закрываешь, почему у тебя, а не у конкурента.',how:'ДНК клиента + оффер по Хормози + 3 сегмента ЦА с обоснованием на данных.', time:'~4-6 часов'},
+    ],
+  },
+};
+
+// === NICHE → CASE MAPPING ===
+// Map each sub-niche to a case key for case studies
+const NICHE_TO_CASE = {
+  beauty:'services', horeca:'horeca', biz_services:'services', it:'it',
+  creative:'marketing', education:'education', medical:'services',
+  logistics:'production', construction:'production', realty_s:'horeca',
+  tourism:'horeca', own_prod:'production', industrial:'production',
+  agro:'production', ecom:'ecom', offline_shop:'ecom', retail:'ecom',
+  realty_o:'horeca', events:'marketing', media:'marketing',
+};
+
+const NICHE_CASES = {
+  services:'Участница с бухгалтерским бизнесом стартовала как «не технарь». За 8 недель создала 4 коммерческих продукта: ассистент для анализа банковских запросов, лендинг с калькулятором рисков, квиз-воронку с Telegram-ботом и дашборд для бухгалтеров с данными налоговой в реальном времени.',
+  ecom:'Участница из байер-сервиса (премиум-сегмент, 15+ лет в нише) за 3 дня создала 3 Telegram-бота: анонсер товаров, рассыльщик по 30 группам и трекер цен. Потратила ~$5. Экономия – 30 минут ежедневно.',
+  education:'Участник за 3 дня создал образовательный сайт-тренажер по финансовой грамотности с личным кабинетом, админкой и оплатой через Stripe. Другой участник построил LMS-платформу с 5 ролями и индивидуальными маршрутами обучения.',
+  production:'Участник с производством керамики на Бали заменил Excel на полноценную мини-CRM: автосписание материалов, управление заказами, графики обжига, календари сотрудников. Через Deep Research нашел нишу «идеальный шторм» – большой спрос, высокий чек, ноль предложений.',
+  it:'Участник обнаружил дыры безопасности в своем vibe-коде и создал SaaS-сканер Code Armor – Telegram-бот, который проверяет сайты и репозитории на уязвимости. Домен, логотип, подписочная модель – за несколько дней.',
+  marketing:'Участница из маркетингового агентства создала калькулятор окупаемости для клиентов – наглядно показывает, сколько они теряют без рекламы. Плюс Telegram-бот для аренды домиков в Хорватии с каталогом, календарем и бронированием.',
+  finance:'Участник создал инвестиционный калькулятор доходности на лендинге – сумма, срок, процент, мгновенный расчет. Сделано за 2 часа прямо на уроке.',
+  horeca:'Участник из отельного бизнеса в Австрии создал тренажер для команды на базе SOPs, автосбор отзывов с OTA-платформ и 3 AI-агента: утренний бриф, мониторинг аукционов недвижимости в Вене, еженедельный отчет план vs факт.',
+};
+
+// === STATE ===
+let step = 0;
+let answers = {market:null, niche:null, role:null, pain:null};
+const TOTAL_STEPS = 4;
+
+function render(){
+  // Progress bar
+  const pb = document.getElementById('progress');
+  pb.innerHTML = Array.from({length:TOTAL_STEPS+1},(_,i)=>{
+    let cls='progress-seg';
+    if(i<step) cls+=' done';
+    else if(i===step) cls+=' active';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
+  const body = document.getElementById('quiz-body');
+  if(step===0) renderStep(body,'Шаг 1 из 4','На каком рынке ты работаешь?','',MARKETS,'market');
+  else if(step===1){
+    const niches = NICHES[answers.market]||[];
+    renderStep(body,'Шаг 2 из 4','Выбери свою нишу','',niches,'niche');
+  }
+  else if(step===2) renderStep(body,'Шаг 3 из 4','Какая у тебя роль?','',ROLES,'role');
+  else if(step===3) renderStep(body,'Шаг 4 из 4','Что сейчас болит сильнее всего?','Выбери одну главную проблему',PAINS,'pain');
+  else if(step===4) renderResult(body);
+}
+
+function renderStep(body,label,question,hint,options,key){
+  body.innerHTML=`<div class="fade-in">
+    <div class="step-label">${label}</div>
+    <div class="step-question">${question}</div>
+    ${hint?`<div class="step-hint">${hint}</div>`:''}
+    <div class="options">${options.map(o=>`
+      <button class="option-btn${answers[key]===o.id?' selected':''}" onclick="select('${key}','${o.id}')">
+        <div class="option-icon">${o.icon}</div>
+        <div class="option-text">
+          <strong>${o.name}</strong>
+          <span>${o.desc}</span>
+        </div>
+      </button>
+    `).join('')}</div>
+    <div class="nav-row">
+      ${step>0?`<button class="nav-btn back" onclick="goBack()">← Назад</button>`:''}
+    </div>
+  </div>`;
+}
+
+function renderResult(body){
+  const r = RESULTS[answers.pain];
+  if(!r){body.innerHTML='<p>Результат не найден</p>';return;}
+  const nicheId = answers.niche;
+  const caseKey = NICHE_TO_CASE[nicheId]||'services';
+  const nicheCase = NICHE_CASES[caseKey]||'';
+  const allNiches = Object.values(NICHES).flat();
+  const nicheLabel = allNiches.find(n=>n.id===nicheId)?.name||'';
+  const roleLabel = ROLES.find(n=>n.id===answers.role)?.name||'';
+
+  // Foundation module (always m02)
+  const foundation = {
+    m:M.m02,
+    do:'Освоишь навык, без которого все остальные модули работают вполсилы: как ставить задачу AI так, чтобы получить результат, а не воду. Декомпозиция, мета-промтинг, адвокат дьявола.',
+    how:'4 тренажера для AI-мышления. Навык, который работает в любой нейронке и для любой задачи.',
+    time:'~2-3 часа практики'
+  };
+
+  // Build roadmap
+  const roadmapSteps = [
+    {num:'02',name:'AI-мышление',color:'blue-d',desc:'Фундамент: навык ставить задачи'},
+    ...r.modules.map(mod=>({num:mod.m.num,name:mod.m.name,color:'amber',desc:mod.time}))
+  ];
+
+  body.innerHTML=`<div class="fade-in">
+    <div class="step-label">Твой персональный маршрут</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;">
+      <span class="result-tag module">${nicheLabel}</span>
+      <span class="result-tag green-tag">${roleLabel}</span>
+    </div>
+
+    <div class="result-card">
+      <div class="result-title">${r.title}</div>
+      <div class="result-body">${r.body}</div>
+    </div>
+
+    <!-- Foundation -->
+    <div class="mod-section-label blue-l">Фундамент – Модуль 02</div>
+    <div class="mod-cards">
+      <div class="mod-card foundation">
+        <div class="mod-header">
+          <div class="mod-num">02</div>
+          <div class="mod-header-text">
+            <strong>AI-мышление и промтинг</strong>
+            <div class="mod-time">⏱ ${foundation.time}</div>
+          </div>
+        </div>
+        <div class="mod-do">
+          <div class="mod-do-label">Что ты сделаешь</div>
+          <p>${foundation.do}</p>
+        </div>
+        <div class="mod-how">
+          <div class="mod-how-label">За счет чего</div>
+          <p>${foundation.how}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task modules -->
+    <div class="mod-section-label">Модули под твою задачу</div>
+    <div class="mod-cards">
+      ${r.modules.map(mod=>`
+        <div class="mod-card">
+          <div class="mod-header">
+            <div class="mod-num">${mod.m.num}</div>
+            <div class="mod-header-text">
+              <strong>${mod.m.name}</strong>
+              <div class="mod-time">⏱ ${mod.time}</div>
+            </div>
+          </div>
+          <div class="mod-do">
+            <div class="mod-do-label">Что ты сделаешь</div>
+            <p>${mod.do}</p>
+          </div>
+          <div class="mod-how">
+            <div class="mod-how-label">За счет чего</div>
+            <p>${mod.how}</p>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- Roadmap -->
+    <div class="roadmap">
+      <div class="roadmap-label">Твой путь</div>
+      <div class="roadmap-steps">
+        ${roadmapSteps.map(s=>`
+          <div class="roadmap-step">
+            <div class="roadmap-line">
+              <div class="roadmap-dot ${s.color}">${s.num}</div>
+              <div class="roadmap-stem"></div>
+            </div>
+            <div class="roadmap-text">
+              <strong>${s.name}</strong>
+              <span>${s.desc}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Case study -->
+    ${nicheCase?`
+    <div class="case-box">
+      <div class="case-label">Кейс из твоей ниши</div>
+      <div class="case-text">${nicheCase}</div>
+    </div>
+    `:''}
+
+    <button class="restart-btn" onclick="restart()">↻ Пройти заново</button>
+  </div>`;
+}
+
+function select(key,val){
+  answers[key]=val;
+  // Reset dependent answers
+  if(key==='market'){answers.niche=null;answers.role=null;answers.pain=null;}
+  if(key==='niche'){answers.role=null;answers.pain=null;}
+  if(key==='role'){answers.pain=null;}
+  render();
+  // Auto-advance after short delay
+  setTimeout(()=>{step++;render();window.scrollTo({top:0,behavior:'smooth'});},300);
+}
+
+function goNext(){
+  const keys=['market','niche','role','pain'];
+  if(!answers[keys[step]]) return;
+  step++;
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goBack(){
+  if(step>0){step--;render();}
+}
+
+function restart(){
+  step=0;
+  answers={market:null,niche:null,role:null,pain:null};
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+render();
+</script></body></html>
