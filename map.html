@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Ковчег — Персональный маршрут</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafafa;
+  --bg-card: #ffffff;
+  --bg-soft: #f3f4f6;
+  --bg-warm: #fffbf0;
+  --border: rgba(0,0,0,0.06);
+  --border-hover: rgba(0,0,0,0.12);
+  --text: #1a1a2e;
+  --text-mid: #52556a;
+  --text-dim: #9096a8;
+  --accent: #d97706;
+  --accent-light: #f59e0b;
+  --accent-bg: rgba(217,119,6,0.07);
+  --accent-border: rgba(217,119,6,0.2);
+  --green: #16a34a;
+  --green-bg: rgba(22,163,74,0.06);
+  --green-border: rgba(22,163,74,0.18);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.04);
+  --radius: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  line-height: 1.68;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+.page { max-width: 760px; margin: 0 auto; padding: 56px 28px 100px; }
+
+/* Hero */
+.hero { margin-bottom: 56px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 13px; border-radius: 999px;
+  background: var(--accent-bg); border: 1px solid var(--accent-border);
+  font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 24px;
+}
+.hero-badge i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-light); display: block; }
+h1.hero-title {
+  font-family: 'Unbounded', sans-serif; font-weight: 900;
+  font-size: clamp(32px, 6.5vw, 52px); line-height: 1.0;
+  color: var(--text); letter-spacing: -0.025em; margin-bottom: 6px;
+}
+h1.hero-title em { font-style: normal; color: var(--accent); }
+.hero-sub {
+  font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 24px;
+}
+.hero-desc { font-size: 16px; color: var(--text-mid); line-height: 1.8; max-width: 600px; }
+.hero-desc strong { color: var(--text); font-weight: 700; }
+
+/* Divider */
+.divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+/* Block */
+.block { margin-bottom: 64px; }
+.section-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-title {
+  font-family: 'Unbounded', sans-serif; font-weight: 800;
+  font-size: clamp(19px, 3vw, 26px); color: var(--text);
+  line-height: 1.18; margin-bottom: 10px; letter-spacing: -0.015em;
+}
+.section-desc { font-size: 14.5px; color: var(--text-mid); line-height: 1.75; margin-bottom: 24px; }
+
+/* Highlight */
+.highlight {
+  background: var(--bg-warm); border: 1px solid var(--accent-border);
+  border-radius: 12px; padding: 18px 22px; font-size: 14px;
+  color: var(--text); line-height: 1.7; margin: 20px 0;
+}
+
+/* Note */
+.note {
+  background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px 18px; font-size: 13px; color: var(--text-mid);
+  display: flex; gap: 10px; align-items: flex-start; margin: 14px 0; line-height: 1.65;
+}
+
+/* Steps */
+.steps { display: flex; flex-direction: column; gap: 10px; }
+.step-item {
+  display: flex; gap: 16px; align-items: flex-start;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.step-item:hover { box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+.step-num {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--accent-bg); border: 1.5px solid var(--accent-border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 800;
+  color: var(--accent); flex-shrink: 0;
+}
+.step-body strong {
+  font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 13px;
+  color: var(--text); display: block; margin-bottom: 4px;
+}
+.step-body p { font-size: 13.5px; color: var(--text-mid); line-height: 1.65; }
+
+/* Manifesto */
+.manifesto { display: flex; flex-direction: column; gap: 3px; }
+.manifesto-item {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 20px; display: flex; gap: 12px; align-items: flex-start;
+  font-size: 13.5px; color: var(--text-mid); line-height: 1.65;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.manifesto-item:hover { border-color: var(--border-hover); box-shadow: var(--shadow-sm); }
+.manifesto-item:first-child { border-radius: 12px 12px 8px 8px; }
+.manifesto-item:last-child { border-radius: 8px 8px 12px 12px; }
+.manifesto-item strong { color: var(--text); }
+.mdot { color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+
+/* CTA button */
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 32px; border-radius: 12px;
+  background: var(--accent); color: #fff; border: none;
+  font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 700;
+  text-decoration: none; letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(217,119,6,0.25);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.cta-btn:hover { background: #b45309; box-shadow: 0 4px 14px rgba(217,119,6,0.3); }
+
+/* Quote */
+.quote-big {
+  border-left: 3px solid var(--accent); padding: 22px 28px; margin: 24px 0;
+  background: var(--bg-warm); border-radius: 0 12px 12px 0;
+}
+.quote-big .qtext {
+  font-family: 'Unbounded', sans-serif; font-weight: 800;
+  font-size: clamp(13px, 1.5vw, 15px); color: var(--text);
+  line-height: 1.3; letter-spacing: -0.01em;
+}
+.quote-big .qsub { font-size: 13.5px; color: var(--text-mid); margin-top: 12px; line-height: 1.65; }
+
+/* Card */
+.card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 24px; margin-bottom: 10px;
+  box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, border-color 0.2s;
+}
+.card:hover { box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+.card-title { font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 13px; color: var(--text); margin-bottom: 8px; }
+.card-body { font-size: 13.5px; color: var(--text-mid); line-height: 1.7; }
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border); padding-top: 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-brand { font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 13px; color: var(--accent); }
+.footer-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); }
+
+@media (max-width: 640px) {
+  .page { padding: 36px 18px 80px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-badge"><i></i> Перед стартом</div>
+    <h1 class="hero-title">Персональный<br><em>маршрут</em></h1>
+    <div class="hero-sub">Конкретно под твои цели, задачи и проект</div>
+    <div class="hero-desc">
+      Прямо сейчас пришло время построить твой персональный маршрут в программе. Ниже тебя ждет фреймворк – <strong>ключ к твоим результатам</strong>. Конкретно под твои цели, задачи и проект.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 01 · Как это работает -->
+  <div class="block">
+    <div class="section-label">01</div>
+    <div class="section-title">Как это работает?</div>
+    <div class="section-desc">Фреймворк состоит из 9 коротких блоков – по одному на каждый модуль программы. Пройдя каждый блок ты увидишь, какие возможности открывает модуль, и поймешь, какие задачи решишь на каждом этапе обучения.</div>
+
+    <div class="highlight">⚡ <strong>На выходе – твой личный маршрут через программу.</strong> Ты будешь заранее знать, какие модули критичны именно для тебя, и заходить в каждое занятие не как пассивный наблюдатель, а как проактивный участник.</div>
+  </div>
+
+  <!-- 02 · Почему это важно -->
+  <div class="block">
+    <div class="section-label">02</div>
+    <div class="section-title">Почему это важно</div>
+    <div class="section-desc">Большинство участников курсов теряют до 40% ценности просто потому, что не понимают, зачем конкретно им модуль. Фреймворк решает именно это – ты сразу видишь связь между тем, что происходит на занятии, и тем, что нужно именно тебе.</div>
+    <div class="section-desc">Участники, которые используют фреймворк до старта, начинают внедрять инструменты в жизнь и бизнес уже с первого занятия – а не ищут применение после.</div>
+  </div>
+
+  <!-- 03 · Сколько времени займет -->
+  <div class="block">
+    <div class="section-label">03</div>
+    <div class="section-title">Сколько времени займет</div>
+    <div class="section-desc">15–20 минут. Внутри нет правильных или неправильных ответов – только честный разговор с собой. Твои ответы сохраняются автоматически, можно вернуться в любой момент и дополнить или пересмотреть их.</div>
+  </div>
+
+  <!-- 04 · Что делать -->
+  <div class="block">
+    <div class="section-label">04</div>
+    <div class="section-title">Что делать</div>
+
+    <div class="steps">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Жми на кнопку ниже</strong>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Пройди все 9 блоков</strong>
+          <p>По порядку, не пропуская</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Заполни персональный роадмэп</strong>
+          <p>Расставь приоритеты по модулям и зафиксируй 3 обязательства перед собой</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Приходи на первое занятие</strong>
+          <p>С пониманием, зачем ты здесь и что хочешь изменить</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 32px;">
+      <a href="https://ai-ark-deploy.vercel.app/" target="_blank" class="cta-btn" style="width: 100%; justify-content: center;">👉 ОТКРЫТЬ ФРЕЙМВОРК</a>
+    </div>
+  </div>
+
+  <div class="quote-big" style="margin-top: 0;">
+    <div class="qtext">Это займет 15 минут. Но сэкономит тебе недели блужданий по программе без результата.</div>
+    <div class="qsub">Просто сделай это до первого занятия – и ты почувствуешь разницу уже на нем.</div>
+  </div>
+
+  <div class="card" style="margin-top: 24px;">
+    <div class="card-title">Остались вопросы?</div>
+    <div class="card-body">
+      Пиши: <a href="https://t.me/kuratoraikovcheg" target="_blank" style="color: var(--accent); font-weight: 600; text-decoration: none;">@kuratoraikovcheg</a><br>
+      Куратор на связи: Пн–Пт, 10:00–19:00 (по Киеву). Сб–Вс: выходные.
+    </div>
+  </div>
+
+  <div class="footer" style="margin-top: 48px;">
+    <div class="footer-brand">AI·КОВЧЕГ</div>
+    <div class="footer-meta">Перед стартом · Персональный маршрут</div>
+  </div>
+
+</div>
+</body>
+</html>
