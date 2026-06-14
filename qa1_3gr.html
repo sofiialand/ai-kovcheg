@@ -116,16 +116,23 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .section-desc.stack-lead { margin-bottom: 14px; }
 .lead-phrase { color: var(--text); font-weight: 700; font-size: 1.04em; }
 
-/* Info card (when / start) */
-.info-card {
-  background: var(--bg-warm); border: 1px solid var(--accent-border);
-  border-radius: 12px; padding: 16px 20px; margin-bottom: 22px;
-  display: flex; flex-direction: column; gap: 9px;
+/* Info tiles (when / start) */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+.info-tile {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow-sm);
 }
-.info-row { display: flex; gap: 11px; align-items: flex-start; }
-.info-emoji { flex-shrink: 0; font-size: 17px; line-height: 1.4; }
-.info-key { font-weight: 700; color: var(--text); }
-.info-val { color: var(--text-mid); }
+.info-tile-label {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 7px;
+}
+.info-emoji { flex-shrink: 0; font-size: 14px; line-height: 1; }
+.info-tile-val {
+  font-family: 'Unbounded', sans-serif; font-weight: 800;
+  font-size: 15px; color: var(--text); line-height: 1.3; letter-spacing: -0.01em;
+}
 
 /* Outro */
 .outro { text-align: center; margin-top: 28px; }
@@ -261,6 +268,10 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     padding: 12px 14px 16px;
     max-width: 100%;
   }
+  .info-grid { grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
+  .info-tile { padding: 11px 13px; }
+  .info-tile-label { margin-bottom: 5px; font-size: 9px; }
+  .info-tile-val { font-size: 13px; }
   .hero { margin-bottom: 6px; }
   .hero-badge { margin-bottom: 6px; padding: 3px 10px; font-size: 9px; }
   h1.hero-title { font-size: clamp(22px, 7.5vw, 30px); line-height: 0.98; }
@@ -327,12 +338,18 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 
 <div class="page">
 
-  <div class="info-card">
-    <div class="info-row"><span class="info-emoji">🗓</span><div><span class="info-key" data-i18n="when_k">Когда:</span> <span class="info-val" data-i18n="when_v">04.06.2026, чт</span></div></div>
-    <div class="info-row"><span class="info-emoji">🕛</span><div><span class="info-key" data-i18n="start_k">Начало:</span> <span class="info-val" data-i18n="start_v">13:00 по Киеву / 12:00 по центральной Европе</span></div></div>
+  <div class="info-grid">
+    <div class="info-tile">
+      <div class="info-tile-label"><span class="info-emoji">🗓</span><span data-i18n="when_k">Когда</span></div>
+      <div class="info-tile-val" data-i18n="when_v">04.06.2026, чт</div>
+    </div>
+    <div class="info-tile">
+      <div class="info-tile-label"><span class="info-emoji">🕛</span><span data-i18n="start_k">Начало</span></div>
+      <div class="info-tile-val" data-i18n="start_v">13:00 по Киеву / 12:00 по центральной Европе</div>
+    </div>
   </div>
 
-  <div class="hero-desc" data-i18n="intro">🔥 Это живая сессия для тех, кто хочет получить еще больше практики и разбора индивидуальных запросов, задать вопросы и <strong>докрутить свои реальные задачи</strong> ⚓</div>
+  <div class="hero-desc" data-i18n="intro">🔥 Это живая сессия для тех, кто хочет получить еще больше практики и разбора индивидуальных запросов, задать вопросы и <strong>докрутить свои реальные задачи</strong></div>
 
   <div class="divider"></div>
 
@@ -375,11 +392,11 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 <script>
 const i18n = {
   ru: {
-    when_k: "Когда:",
+    when_k: "Когда",
     when_v: "04.06.2026, чт",
-    start_k: "Начало:",
+    start_k: "Начало",
     start_v: "13:00 по Киеву / 12:00 по центральной Европе",
-    intro: '🔥 Это живая сессия для тех, кто хочет получить еще больше практики и разбора индивидуальных запросов, задать вопросы и <strong>докрутить свои реальные задачи</strong> ⚓',
+    intro: '🔥 Это живая сессия для тех, кто хочет получить еще больше практики и разбора индивидуальных запросов, задать вопросы и <strong>докрутить свои реальные задачи</strong>',
     wb: "Что будет",
     l1: "Q&amp;A",
     d1: "Отвечаем на ваши вопросы по AI-инструментам и сценариям их использования.",
@@ -393,11 +410,11 @@ const i18n = {
     o2: "Будет очень живо и полезно 🚀"
   },
   uk: {
-    when_k: "Коли:",
+    when_k: "Коли",
     when_v: "04.06.2026, чт",
-    start_k: "Початок:",
+    start_k: "Початок",
     start_v: "13:00 за Києвом / 12:00 за центральною Європою",
-    intro: '🔥 Це жива сесія для тих, хто хоче отримати ще більше практики та розбору індивідуальних запитів, поставити питання і <strong>докрутити свої реальні задачі</strong> ⚓',
+    intro: '🔥 Це жива сесія для тих, хто хоче отримати ще більше практики та розбору індивідуальних запитів, поставити питання і <strong>докрутити свої реальні задачі</strong>',
     wb: "Що буде",
     l1: "Q&amp;A",
     d1: "Відповідаємо на ваші питання щодо AI-інструментів та сценаріїв їх використання.",
