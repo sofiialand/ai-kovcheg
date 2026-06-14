@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI-Ковчег – Фундамент AI</title>
+<title>AI-Ковчег – Q&A сессия</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -116,6 +116,32 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .section-desc.stack-lead { margin-bottom: 14px; }
 .lead-phrase { color: var(--text); font-weight: 700; font-size: 1.04em; }
 
+/* Info tiles (when / start) */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+.info-tile {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow-sm);
+}
+.info-tile-label {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 7px;
+}
+.info-emoji { flex-shrink: 0; font-size: 14px; line-height: 1; }
+.info-tile-val {
+  font-family: 'Unbounded', sans-serif; font-weight: 800;
+  font-size: 15px; color: var(--text); line-height: 1.3; letter-spacing: -0.01em;
+}
+
+/* Outro */
+.outro { text-align: center; margin-top: 28px; }
+.outro-line {
+  font-family: 'Unbounded', sans-serif; font-weight: 800;
+  font-size: 14px; color: var(--text); line-height: 1.5;
+}
+.outro-line + .outro-line { margin-top: 4px; }
+
 /* Lesson section heading "Что будет" (big, Unbounded) */
 .lesson-head {
   font-family: 'Unbounded', sans-serif; font-weight: 800;
@@ -157,21 +183,6 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 }
 .tool-list strong { color: var(--text); font-weight: 700; }
 .tool-bul { flex-shrink: 0; font-size: 16px; line-height: 1.4; }
-
-/* Check list */
-.check-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
-.check-list li {
-  display: flex; gap: 12px; align-items: flex-start;
-  font-size: 14.5px; color: var(--text-mid); line-height: 1.6;
-}
-.check-list strong { color: var(--text); font-weight: 700; font-size: 1.04em; }
-.chk {
-  flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px;
-  background: var(--accent-bg); border: 1px solid var(--accent-border);
-  color: var(--accent); font-weight: 800; font-size: 13px;
-  display: flex; align-items: center; justify-content: center;
-  margin-top: 1px;
-}
 
 /* Result label (outcome block, same weight as block-head) */
 .result-box {
@@ -257,25 +268,29 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     padding: 12px 14px 16px;
     max-width: 100%;
   }
+  .info-grid { grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
+  .info-tile { padding: 11px 13px; }
+  .info-tile-label { margin-bottom: 5px; font-size: 9px; }
+  .info-tile-val { font-size: 13px; }
   .hero { margin-bottom: 6px; }
   .hero-badge { margin-bottom: 6px; padding: 3px 10px; font-size: 9px; }
   h1.hero-title { font-size: clamp(22px, 7.5vw, 30px); line-height: 0.98; }
-  .hero-desc { font-size: 13.5px; line-height: 1.36; }
+  .hero-desc { font-size: 13.5px; line-height: 1.4; }
   .divider { margin: 8px 0; }
   .block { margin-bottom: 11px; }
   .block:last-of-type { margin-bottom: 0; }
-  .lesson-item { padding: 0 0 9px; }
-  .lesson-item:last-of-type { padding-bottom: 9px; }
+  .lesson-item { padding: 0 0 12px; }
+  .lesson-item:last-of-type { padding-bottom: 12px; }
   .lesson-item .block-head { margin-bottom: 4px; }
-  .lesson-head { font-size: 15px; margin-bottom: 5px; gap: 9px; }
+  .lesson-head { font-size: 15px; margin-bottom: 6px; gap: 9px; }
   .block-head { margin-bottom: 4px; gap: 9px; }
   .block-head > span:last-child { font-size: 11px; line-height: 1.15; }
   .block-num { width: 22px; height: 22px; border-radius: 7px; font-size: 10px; }
-  .result-box { padding: 10px 14px; margin-bottom: 7px; }
+  .result-box { padding: 11px 14px; margin-bottom: 7px; }
   .result-label { font-size: 13px; margin-bottom: 5px; gap: 7px; }
-  .result-text { font-size: 11.5px; line-height: 1.36; }
+  .result-text { font-size: 11.5px; line-height: 1.4; }
   .block-sub { font-size: 12px; margin-bottom: 6px; line-height: 1.35; }
-  .section-desc { font-size: 11.5px; line-height: 1.36; margin-bottom: 0; }
+  .section-desc { font-size: 11.5px; line-height: 1.4; margin-bottom: 0; }
   .section-desc.stack-lead { margin-bottom: 6px; }
   .tool-list { gap: 5px; }
   .tool-list li { font-size: 11.5px; gap: 9px; line-height: 1.38; }
@@ -323,42 +338,52 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 
 <div class="page">
 
-  <div class="hero">
-    <h1 class="hero-title"><span data-i18n="title2">Фундамент</span> <em data-i18n="title1">AI</em></h1>
+  <div class="info-grid">
+    <div class="info-tile">
+      <div class="info-tile-label"><span class="info-emoji">🗓</span><span data-i18n="when_k">Когда</span></div>
+      <div class="info-tile-val" data-i18n="when_v">11.06.2026, чт</div>
+    </div>
+    <div class="info-tile">
+      <div class="info-tile-label"><span class="info-emoji">🕛</span><span data-i18n="start_k">Начало</span></div>
+      <div class="info-tile-val" data-i18n="start_v">13:00 по Киеву / 12:00 по центральной Европе</div>
+    </div>
   </div>
 
-  <div class="hero-desc" data-i18n="intro">Первый шаг: собираем рабочий набор нейросетей и сразу <strong>внедряем AI в повседневную жизнь и бизнес</strong>.</div>
+  <div class="hero-desc" data-i18n="intro">🔥 Живая практическая сессия для тех, кто хочет глубже разобраться в промтинге, получить разбор своих задач, задать вопросы и <strong>прокачать реальные рабочие процессы</strong> ⚓</div>
 
   <div class="divider"></div>
 
   <div class="lesson-head"><span class="lesson-emoji">🎥</span><span data-i18n="wb">Что будет</span></div>
 
-  <!-- 01 AI-Start Pack -->
+  <!-- 01 Q&A -->
   <div class="block lesson-item">
-    <div class="block-head"><span class="block-num">01</span><span data-i18n="l1">AI-Start Pack</span></div>
-    <div class="section-desc"><strong class="lead-phrase" data-i18n="t1">Какие нейросети реально нужны для старта.</strong> <span data-i18n="d1">Собираем рабочий набор – без хаоса и лишнего.</span></div>
+    <div class="block-head"><span class="block-num">01</span><span data-i18n="l1">Q&amp;A</span></div>
+    <div class="section-desc"><span data-i18n="d1">Отвечаем на ваши вопросы по AI, инструментам и сценариям применения.</span></div>
   </div>
 
-  <!-- 02 Базовые сценарии -->
+  <!-- 02 Разбор workflow -->
   <div class="block lesson-item">
-    <div class="block-head"><span class="block-num">02</span><span data-i18n="l2">Базовые сценарии</span></div>
-    <div class="section-desc"><strong class="lead-phrase" data-i18n="t2">С чего начинаем работу.</strong> <span data-i18n="d2">Голосовой ввод, анализ данных, контент и глубокий поиск.</span></div>
+    <div class="block-head"><span class="block-num">02</span><span data-i18n="l2">Разбор workflow</span></div>
+    <div class="section-desc"><span data-i18n="d2">Как создавать эффективные промты под конкретные задачи.</span></div>
   </div>
 
-  <!-- 03 От ChatGPT к системе -->
+  <!-- 03 Анализ заданий -->
   <div class="block lesson-item">
-    <div class="block-head"><span class="block-num">03</span><span data-i18n="l3">От «только ChatGPT» к системе</span></div>
-    <div class="section-desc"><strong class="lead-phrase" data-i18n="t3">Переход на новый уровень использования AI.</strong> <span data-i18n="d3">Выстраиваем систему, которая экономит время и усиливает результат.</span></div>
+    <div class="block-head"><span class="block-num">03</span><span data-i18n="l3">Анализ заданий</span></div>
+    <div class="section-desc"><span data-i18n="d3">Смотрим, улучшаем, оптимизируем.</span></div>
   </div>
 
+  <!-- 04 Практические рекомендации -->
+  <div class="block lesson-item">
+    <div class="block-head"><span class="block-num">04</span><span data-i18n="l4">Практические рекомендации</span></div>
+    <div class="section-desc"><span data-i18n="d4">Конкретные советы под ваши кейсы.</span></div>
+  </div>
+
+  <!-- Формат -->
   <div class="block">
-    <div class="result-box">
-      <div class="result-label"><span class="result-emoji">💡</span><span data-i18n="rl">Практика и первое задание</span></div>
-      <div class="result-text" data-i18n="h4">Уже на первом воркшопе внедряем AI-инструменты в повседневную жизнь и бизнес, чтобы <strong>сразу получать результаты</strong>, а не просто «что-то знать».</div>
-    </div>
     <div class="result-box gray">
       <div class="result-label"><span class="result-emoji">📌</span><span data-i18n="fl">Формат</span></div>
-      <div class="result-text" data-i18n="n4">Онбординг + практический воркшоп с показом инструментов вживую.</div>
+      <div class="result-text" data-i18n="n4">Вопрос-ответ • Live-разборы • Workflow-сессия. <strong>Максимум практики и пользы, минимум теории.</strong></div>
     </div>
   </div>
 
@@ -368,42 +393,40 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 <script>
 const i18n = {
   ru: {
-    title1: "AI",
-    title2: "Фундамент",
-    intro: 'Первый шаг: собираем рабочий набор нейросетей и сразу <strong>внедряем AI в повседневную жизнь и бизнес</strong>.',
+    when_k: "Когда",
+    when_v: "11.06.2026, чт",
+    start_k: "Начало",
+    start_v: "13:00 по Киеву / 12:00 по центральной Европе",
+    intro: '🔥 Живая практическая сессия для тех, кто хочет глубже разобраться в промтинге, получить разбор своих задач, задать вопросы и <strong>прокачать реальные рабочие процессы</strong> ⚓',
     wb: "Что будет",
-    l1: "AI-Start Pack",
-    t1: "Какие нейросети реально нужны для старта.",
-    d1: "Собираем рабочий набор – без хаоса и лишнего.",
-    l2: "Базовые сценарии",
-    t2: "С чего начинаем работу.",
-    d2: "Голосовой ввод, анализ данных, контент и глубокий поиск.",
-    l3: "От «только ChatGPT» к системе",
-    t3: "Переход на новый уровень использования AI.",
-    d3: "Выстраиваем систему, которая экономит время и усиливает результат.",
-    rl: "Практика и первое задание",
+    l1: "Q&amp;A",
+    d1: "Отвечаем на ваши вопросы по AI, инструментам и сценариям применения.",
+    l2: "Разбор workflow",
+    d2: "Как создавать эффективные промты под конкретные задачи.",
+    l3: "Анализ заданий",
+    d3: "Смотрим, улучшаем, оптимизируем.",
+    l4: "Практические рекомендации",
+    d4: "Конкретные советы под ваши кейсы.",
     fl: "Формат",
-    h4: 'Уже на первом воркшопе внедряем AI-инструменты в повседневную жизнь и бизнес, чтобы <strong>сразу получать результаты</strong>, а не просто «что-то знать».',
-    n4: 'Онбординг + практический воркшоп с показом инструментов вживую.'
+    n4: 'Вопрос-ответ • Live-разборы • Workflow-сессия. <strong>Максимум практики и пользы, минимум теории.</strong>'
   },
   uk: {
-    title1: "AI",
-    title2: "Фундамент",
-    intro: 'Перший крок: збираємо робочий набір нейромереж і одразу <strong>впроваджуємо AI у повсякденне життя та бізнес</strong>.',
+    when_k: "Коли",
+    when_v: "11.06.2026, чт",
+    start_k: "Початок",
+    start_v: "13:00 за Києвом / 12:00 за центральною Європою",
+    intro: '🔥 Жива практична сесія для тих, хто хоче глибше розібратися в промтингу, отримати розбір своїх задач, поставити питання і <strong>прокачати реальні робочі процеси</strong> ⚓',
     wb: "Що буде",
-    l1: "AI-Start Pack",
-    t1: "Які нейромережі реально потрібні для старту.",
-    d1: "Збираємо робочий набір – без хаосу та зайвого.",
-    l2: "Базові сценарії",
-    t2: "З чого починаємо роботу.",
-    d2: "Голосовий ввід, аналіз даних, контент і глибокий пошук.",
-    l3: "Від «тільки ChatGPT» до системи",
-    t3: "Перехід на новий рівень використання AI.",
-    d3: "Вибудовуємо систему, яка економить час і підсилює результат.",
-    rl: "Практика і перше завдання",
+    l1: "Q&amp;A",
+    d1: "Відповідаємо на ваші питання щодо AI, інструментів та сценаріїв застосування.",
+    l2: "Розбір workflow",
+    d2: "Як створювати ефективні промти під конкретні задачі.",
+    l3: "Аналіз завдань",
+    d3: "Дивимося, покращуємо, оптимізуємо.",
+    l4: "Практичні рекомендації",
+    d4: "Конкретні поради під ваші кейси.",
     fl: "Формат",
-    h4: 'Вже на першому воркшопі впроваджуємо AI-інструменти у повсякденне життя та бізнес, щоб <strong>одразу отримувати результати</strong>, а не просто «щось знати».',
-    n4: 'Онбординг + практичний воркшоп з показом інструментів наживо.'
+    n4: 'Питання-відповідь • Live-розбори • Workflow-сесія. <strong>Максимум практики та користі, мінімум теорії.</strong>'
   }
 };
 
