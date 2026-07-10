@@ -452,7 +452,24 @@ function setLang(lang) {
   document.querySelectorAll('.lang-switch button').forEach(b => {
     b.classList.toggle('active', b.getAttribute('data-lang') === lang);
   });
+  if (typeof sendKovchegHeight === 'function') sendKovchegHeight();
 }
+
+// Auto-resize: когда страница встроена в iframe, сообщаем родителю реальную высоту контента
+(function(){
+  if (window.self === window.top) return; // только внутри iframe, standalone не трогаем
+  document.documentElement.style.minHeight = '0';
+  document.body.style.minHeight = '0';
+  window.sendKovchegHeight = function(){
+    var h = document.body.scrollHeight;
+    parent.postMessage({ kovchegHeight: h }, '*');
+  };
+  window.addEventListener('load', sendKovchegHeight);
+  window.addEventListener('resize', sendKovchegHeight);
+  if (window.ResizeObserver) new ResizeObserver(sendKovchegHeight).observe(document.body);
+  document.querySelectorAll('img').forEach(function(im){ im.addEventListener('load', sendKovchegHeight); });
+  setTimeout(sendKovchegHeight, 400);
+})();
 </script>
 </body>
 </html>
