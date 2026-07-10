@@ -381,12 +381,12 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
   </div>
 
   <div class="block">
-    <div class="section-desc fg-text"><span data-i18n="p1">Сводим разрозненные источники в единую среду и разберёмся: как собирать, размечать и хранить данные, чтобы продажи, график, маркетинг и учёт превратились в единую систему вместо хаоса.</span></div>
+    <div class="section-desc fg-text"><span data-i18n="p1">Сводим разрозненные источники в единую среду и разберемся: как собирать, размечать и хранить данные, чтобы продажи, график, маркетинг и учет превратились в единую систему вместо хаоса.</span></div>
   </div>
 
   <div class="block">
     <div class="result-box">
-      <div class="result-text fg-text" data-i18n="p2">Сегодня <strong>подключаем AI напрямую к твоим сервисам</strong> и собираем данные бизнеса в одну систему — через API там, где он есть, и через обёртку там, где его нет.</div>
+      <div class="result-text fg-text" data-i18n="p2">Сегодня <strong>подключаем AI напрямую к твоим сервисам</strong> и собираем данные бизнеса в одну систему — через API там, где он есть, и через обертку там, где его нет.</div>
     </div>
   </div>
 
@@ -405,8 +405,8 @@ const i18n = {
     topic_k: "Тема",
     topic_1: "Подключаем AI к данным и сервисам",
     topic_2: "Переходим к автоматизации работы с данными бизнеса, когда AI работает с актуальной информацией в режиме реального времени",
-    p1: "Сводим разрозненные источники в единую среду и разберёмся: как собирать, размечать и хранить данные, чтобы продажи, график, маркетинг и учёт превратились в единую систему вместо хаоса.",
-    p2: 'Сегодня <strong>подключаем AI напрямую к твоим сервисам</strong> и собираем данные бизнеса в одну систему — через API там, где он есть, и через обёртку там, где его нет.'
+    p1: "Сводим разрозненные источники в единую среду и разберемся: как собирать, размечать и хранить данные, чтобы продажи, график, маркетинг и учет превратились в единую систему вместо хаоса.",
+    p2: 'Сегодня <strong>подключаем AI напрямую к твоим сервисам</strong> и собираем данные бизнеса в одну систему — через API там, где он есть, и через обертку там, где его нет.'
   },
   uk: {
     when_k: "Коли",
@@ -432,7 +432,24 @@ function setLang(lang) {
   document.querySelectorAll('.lang-switch button').forEach(b => {
     b.classList.toggle('active', b.getAttribute('data-lang') === lang);
   });
+  if (typeof sendKovchegHeight === 'function') sendKovchegHeight();
 }
+
+// Auto-resize: когда страница встроена в iframe, сообщаем родителю реальную высоту контента
+(function(){
+  if (window.self === window.top) return; // только внутри iframe, standalone не трогаем
+  document.documentElement.style.minHeight = '0';
+  document.body.style.minHeight = '0';
+  window.sendKovchegHeight = function(){
+    var h = document.body.scrollHeight;
+    parent.postMessage({ kovchegHeight: h }, '*');
+  };
+  window.addEventListener('load', sendKovchegHeight);
+  window.addEventListener('resize', sendKovchegHeight);
+  if (window.ResizeObserver) new ResizeObserver(sendKovchegHeight).observe(document.body);
+  document.querySelectorAll('img').forEach(function(im){ im.addEventListener('load', sendKovchegHeight); });
+  setTimeout(sendKovchegHeight, 400);
+})();
 </script>
 </body>
 </html>
