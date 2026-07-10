@@ -321,19 +321,19 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
   <!-- 01 Не только сайты -->
   <div class="block lesson-item">
     <div class="block-head"><span class="block-num">01</span><span data-i18n="l1">Не только сайты</span></div>
-    <div class="section-desc"><strong class="lead-phrase" data-i18n="t1">Один инструмент — десятки задач, а не только лендинги.</strong> <span data-i18n="d1">Разберём, где ещё применим Claude Code: дашборды, презентации, калькуляторы, внутренние борды и другие рабочие инструменты. Посмотрим, какой спектр задач он реально закрывает.</span></div>
+    <div class="section-desc"><strong class="lead-phrase" data-i18n="t1">Один инструмент — десятки задач, а не только лендинги.</strong> <span data-i18n="d1">Разберем, где еще применим Claude Code: дашборды, презентации, калькуляторы, внутренние борды и другие рабочие инструменты. Посмотрим, какой спектр задач он реально закрывает.</span></div>
   </div>
 
   <!-- 02 Лендинг с нуля -->
   <div class="block lesson-item">
     <div class="block-head"><span class="block-num">02</span><span data-i18n="l2">Лендинг с нуля без кода</span></div>
-    <div class="section-desc"><strong class="lead-phrase" data-i18n="t2">Весь путь от HTML-файла до готового сайта через Claude Code.</strong> <span data-i18n="d2">Пошаговый разбор: дизайн, анимация и интерактивные элементы. На практике добавим калькулятор декомпозиции выручки, подберём дизайн по референсу и сгенерируем уникальные фото для сайта через нейросети.</span></div>
+    <div class="section-desc"><strong class="lead-phrase" data-i18n="t2">Весь путь от HTML-файла до готового сайта через Claude Code.</strong> <span data-i18n="d2">Пошаговый разбор: дизайн, анимация и интерактивные элементы. На практике добавим калькулятор декомпозиции выручки, подберем дизайн по референсу и сгенерируем уникальные фото для сайта через нейросети.</span></div>
   </div>
 
   <!-- 03 Публикация -->
   <div class="block lesson-item">
     <div class="block-head"><span class="block-num">03</span><span data-i18n="l3">Публикация в интернете</span></div>
-    <div class="section-desc"><strong class="lead-phrase" data-i18n="t3">Бесплатно и в три простых шага.</strong> <span data-i18n="d3">Деплой через Vercel: пишешь «опубликуй на Vercel» прямо в чате — сервис сам авторизуется и выдаёт живую ссылку. Никакого GitHub и серверов — сайт доступен для всех.</span></div>
+    <div class="section-desc"><strong class="lead-phrase" data-i18n="t3">Бесплатно и в три простых шага.</strong> <span data-i18n="d3">Деплой через Vercel: пишешь «опубликуй на Vercel» прямо в чате — сервис сам авторизуется и выдает живую ссылку. Никакого GitHub и серверов — сайт доступен для всех.</span></div>
   </div>
 
   <!-- Практическая ценность · формат -->
@@ -360,13 +360,13 @@ const i18n = {
     wb: "Что будет",
     l1: "Не только сайты",
     t1: "Один инструмент — десятки задач, а не только лендинги.",
-    d1: "Разберём, где ещё применим Claude Code: дашборды, презентации, калькуляторы, внутренние борды и другие рабочие инструменты. Посмотрим, какой спектр задач он реально закрывает.",
+    d1: "Разберем, где еще применим Claude Code: дашборды, презентации, калькуляторы, внутренние борды и другие рабочие инструменты. Посмотрим, какой спектр задач он реально закрывает.",
     l2: "Лендинг с нуля без кода",
     t2: "Весь путь от HTML-файла до готового сайта через Claude Code.",
-    d2: "Пошаговый разбор: дизайн, анимация и интерактивные элементы. На практике добавим калькулятор декомпозиции выручки, подберём дизайн по референсу и сгенерируем уникальные фото для сайта через нейросети.",
+    d2: "Пошаговый разбор: дизайн, анимация и интерактивные элементы. На практике добавим калькулятор декомпозиции выручки, подберем дизайн по референсу и сгенерируем уникальные фото для сайта через нейросети.",
     l3: "Публикация в интернете",
     t3: "Бесплатно и в три простых шага.",
-    d3: "Деплой через Vercel: пишешь «опубликуй на Vercel» прямо в чате — сервис сам авторизуется и выдаёт живую ссылку. Никакого GitHub и серверов — сайт доступен для всех.",
+    d3: "Деплой через Vercel: пишешь «опубликуй на Vercel» прямо в чате — сервис сам авторизуется и выдает живую ссылку. Никакого GitHub и серверов — сайт доступен для всех.",
     rl: "Практическая ценность",
     fl: "Формат",
     h4: 'Вы освоите навык, который позволяет делать <strong>4–6 лендингов за полтора часа</strong> суммарно, экономя тысячи долларов на дизайнерах.',
@@ -402,7 +402,24 @@ function setLang(lang) {
   document.querySelectorAll('.lang-switch button').forEach(b => {
     b.classList.toggle('active', b.getAttribute('data-lang') === lang);
   });
+  if (typeof sendKovchegHeight === 'function') sendKovchegHeight();
 }
+
+// Auto-resize: когда страница встроена в iframe, сообщаем родителю реальную высоту контента
+(function(){
+  if (window.self === window.top) return; // только внутри iframe, standalone не трогаем
+  document.documentElement.style.minHeight = '0';
+  document.body.style.minHeight = '0';
+  window.sendKovchegHeight = function(){
+    var h = document.body.scrollHeight;
+    parent.postMessage({ kovchegHeight: h }, '*');
+  };
+  window.addEventListener('load', sendKovchegHeight);
+  window.addEventListener('resize', sendKovchegHeight);
+  if (window.ResizeObserver) new ResizeObserver(sendKovchegHeight).observe(document.body);
+  document.querySelectorAll('img').forEach(function(im){ im.addEventListener('load', sendKovchegHeight); });
+  setTimeout(sendKovchegHeight, 400);
+})();
 </script>
 </body>
 </html>
