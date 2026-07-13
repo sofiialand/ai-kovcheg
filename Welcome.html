@@ -858,8 +858,8 @@ function applyTheme(t){
   try { localStorage.setItem('welcometheme', d); } catch(e) {}
 }
 (function initTheme(){
-  var saved = 'dark';
-  try { saved = localStorage.getItem('welcometheme') || 'dark'; } catch(e) {}
+  var saved = 'light';
+  try { saved = localStorage.getItem('welcometheme') || 'light'; } catch(e) {}
   applyTheme(saved);
 })();
 </script>
