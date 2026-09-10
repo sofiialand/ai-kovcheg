@@ -230,6 +230,41 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
   padding: 11px 0; border-bottom: 1px solid var(--border);
   font-size: 13.5px; color: var(--text);
 }
+.tl-row { display: flex; gap: 18px; position: relative; padding-bottom: 28px; }
+.tl-row:last-child { padding-bottom: 0; }
+.tl-row:not(:last-child)::before {
+  content: ''; position: absolute; left: 25px; top: 56px; bottom: 4px;
+  width: 1px; background: var(--border);
+}
+.tl-badge {
+  width: 51px; height: 51px; border-radius: 50%; flex-shrink: 0; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent-dim); border: 1px solid var(--accent-border);
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent);
+}
+.tl-title {
+  font-family: 'Wix Madefor Display', sans-serif; font-weight: 800; font-size: 15px;
+  color: var(--head); margin-bottom: 8px; letter-spacing: -0.01em; padding-top: 12px;
+}
+.tl-body { font-size: 13.5px; color: var(--text-mid); line-height: 1.75; }
+.tl-body div + div { margin-top: 2px; }
+.tl-time {
+  display: flex; gap: 7px; align-items: center; margin-top: 12px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--accent); line-height: 1.5;
+}
+.btn-wrap { text-align: center; margin: 28px 0 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent); color: #fff;
+  font-family: 'Wix Madefor Display', sans-serif; font-weight: 800; font-size: 14px;
+  padding: 16px 30px; border-radius: 12px; text-decoration: none;
+  box-shadow: 0 6px 18px -10px rgba(226,85,46,0.9);
+}
+.btn-note { text-align: center; font-size: 13px; color: var(--text-mid); line-height: 1.7; max-width: 520px; margin: 0 auto; }
+.substep { display: flex; gap: 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; color: var(--text); }
+.substep:last-child { border-bottom: none; }
+.substep i { font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 11px; color: var(--accent); flex-shrink: 0; }
+.substep span { color: var(--text-mid); }
 .ai-item i {
   font-family: 'JetBrains Mono', monospace; font-style: normal;
   font-size: 10px; color: var(--text-dim); flex-shrink: 0;
@@ -802,41 +837,63 @@ table.roadmap td:first-child {
     <div class="section-title">3–5 часов<br><span style="font-size:clamp(16px,2.2vw,21px);font-weight:700;">в неделю. Регулярно.</span></div>
     <p class="section-desc">Не больше. Но стабильно — именно это дает результат, а не интенсивность. Неделя повторяется по одной схеме.</p>
 
-    <div class="rhythm-row">
-      <div class="rhythm-card">
-        <div class="rhythm-day">Пн</div>
-        <div class="rhythm-title">Старт нового модуля</div>
-        <div class="rhythm-desc">Воркшоп: погружение в тему модуля. Запись открывается в 10:00 по Киеву, 09:00 по центральной Европе.</div>
+    <div class="card-title" style="margin-bottom:20px;">Ритм, который повторяется каждую неделю</div>
+
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-badge">Пн</div>
+        <div>
+          <div class="tl-title">Понедельник: старт нового модуля</div>
+          <div class="tl-body">
+            <div>Воркшоп: погружение в тему модуля</div>
+            <div class="tl-time">🕐 Запись доступна с 10:00 по Киеву / 09:00 по центральной Европе</div>
+          </div>
+        </div>
       </div>
-      <div class="rhythm-card">
-        <div class="rhythm-day">Вт — Ср</div>
-        <div class="rhythm-title">Практика</div>
-        <div class="rhythm-desc">Изучаешь материалы в своем ритме, выполняешь задания, отправляешь результаты и вопросы прямо в уроке.</div>
+      <div class="tl-row">
+        <div class="tl-badge">Вт–Ср</div>
+        <div>
+          <div class="tl-title">Вторник – Среда</div>
+          <div class="tl-body">
+            <div>✔ Изучай материалы в своем ритме</div>
+            <div>✔ Выполняй практические задания</div>
+            <div>✔ Отправляй результаты и вопросы прямо в уроке</div>
+          </div>
+        </div>
       </div>
-      <div class="rhythm-card">
-        <div class="rhythm-day">Чт</div>
-        <div class="rhythm-title">Онлайн Q&A и разбор workflow</div>
-        <div class="tier-line" style="margin-top:0;margin-bottom:8px;"><span class="tier">Участник</span></div>
-        <div class="rhythm-desc">Живая сессия: разбор индивидуальных кейсов, вопросы, докручиваем твои реальные задачи. Начало в 13:00 по Киеву, 12:00 по центральной Европе.</div>
+      <div class="tl-row">
+        <div class="tl-badge">Чт</div>
+        <div>
+          <div class="tl-title">Четверг: онлайн Q&A + разбор workflow <span class="tier" style="vertical-align:middle;">Участник</span></div>
+          <div class="tl-body">
+            <div>Это живая сессия для тех, кто хочет получить еще больше практики и разбора индивидуальных кейсов, задать вопросы и докрутить свои реальные задачи</div>
+            <div class="tl-time">🕐 Начало эфира в 13:00 по Киеву / 12:00 по центральной Европе</div>
+          </div>
+        </div>
       </div>
-      <div class="rhythm-card">
-        <div class="rhythm-day">Пт — Вс</div>
-        <div class="rhythm-title">Общение и отдых</div>
-        <div class="rhythm-desc">Догоняешь задание, если нужно, общаешься в чате и отдыхаешь перед следующим модулем.</div>
+      <div class="tl-row">
+        <div class="tl-badge">Пт+</div>
+        <div>
+          <div class="tl-title">Пятница, суббота и воскресенье</div>
+          <div class="tl-body">
+            <div>✔ Общение, отдых</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="note">
+    <div class="highlight" style="margin-top:24px;">
+      🔥 <strong>Каждая неделя – новый уровень</strong>, новые смыслы и прокачка новых навыков
+    </div>
+
+    <div class="card-title" style="margin:36px 0 10px;">Добавь в календарь, чтобы не терять ритм</div>
+    <p class="section-desc" style="margin-bottom:0;">Чтобы не терять ритм добавь расписание к себе в Google Календарь – все напоминания будут под рукой, а тайминг всегда под контролем.</p>
+
+    <div class="btn-wrap"><a class="btn" href="https://calendar.google.com/calendar/u/0?cid=OWM5ODUzNWY2ZWQwYWZkMjk3NTQzNmFjMWRiYzJiNDFhNjdkYmRkNWMwM2UxZWY4YjQ5YjAzYzlkYmMxYmFlY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t" target="_blank">📅 ОТКРЫТЬ КАЛЕНДАРЬ</a></div>
+
+    <div class="note" style="margin-top:20px;">
       <span style="font-size:16px;flex-shrink:0;">🎬</span>
-      <span>Не успел на Q&A в прямом эфире — запись появится в разделе урока на следующий день.</span>
-    </div>
-
-    <div class="fg-cta" style="margin-top:16px;">
-      <div class="fg-cta-icon">📅</div>
-      <div>
-        <strong>Добавь расписание в Google Календарь</strong>
-        <p>Напоминания о воркшопах и эфирах будут приходить сами, тайминг всегда под рукой. <a href="https://calendar.google.com/calendar/u/0?cid=OWM5ODUzNWY2ZWQwYWZkMjk3NTQzNmFjMWRiYzJiNDFhNjdkYmRkNWMwM2UxZWY4YjQ5YjAzYzlkYmMxYmFlY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent-border);">Открыть календарь</a></p>
-      </div>
+      <span>Если вдруг не успеешь на Q&A онлайн – запись будет ждать в разделе урока, на следующий день</span>
     </div>
 
     <div class="highlight">
@@ -946,43 +1003,58 @@ table.roadmap td:first-child {
   <div class="block">
     <div class="section-label">09 · Перед стартом</div>
     <div class="section-title">Персональный маршрут</div>
-    <p class="section-desc">Фреймворк из 9 коротких блоков — по одному на каждый модуль программы. На выходе получаешь маршрут под свои цели, задачи и проект.</p>
+    <p class="section-desc">Конкретно под твои цели, задачи и проект</p>
 
     <div class="card">
-      <div class="card-title">Как это работает</div>
-      <div class="card-body">Проходишь блок за блоком и видишь, какие возможности открывает каждый модуль и какие задачи ты решишь на этом этапе. Заранее знаешь, какие модули критичны именно тебе, и заходишь на занятие с готовым запросом.</div>
-    </div>
-
-    <div class="note" style="margin-top:16px;">
-      <span style="font-size:16px;flex-shrink:0;">⏱️</span>
-      <span>15–20 минут. Правильных и неправильных ответов внутри нет. Ответы сохраняются автоматически — можно вернуться и дополнить их в любой момент.</span>
+      <div class="card-body">Прямо сейчас пришло время построить твой персональный маршрут в программе. Ниже тебя ждет фреймворк – <strong style="color:var(--text);">ключ к твоим результатам</strong>. Конкретно под твои цели, задачи и проект.</div>
     </div>
 
     <div class="steps" style="margin-top:16px;">
       <div class="step-item">
         <div class="step-num">01</div>
-        <div class="step-body"><strong>Открой фреймворк</strong>По ссылке ниже, до первого занятия.</div>
+        <div class="step-body">
+          <strong>Как это работает?</strong>
+          Фреймворк состоит из 9 коротких блоков – по одному на каждый модуль программы. Пройдя каждый блок ты увидишь, какие возможности открывает модуль, и поймешь, какие задачи решишь на каждом этапе обучения.
+        </div>
       </div>
       <div class="step-item">
         <div class="step-num">02</div>
-        <div class="step-body"><strong>Пройди все 9 блоков</strong>По порядку, не пропуская.</div>
+        <div class="step-body">
+          <strong>Почему это важно</strong>
+          Большинство участников курсов теряют до 40% ценности просто потому, что не понимают, зачем конкретно им модуль. Фреймворк решает именно это – ты сразу видишь связь между тем, что происходит на занятии, и тем, что нужно именно тебе.<br><br>
+          Участники, которые используют фреймворк до старта, начинают внедрять инструменты в жизнь и бизнес уже с первого занятия – а не ищут применение после.
+        </div>
       </div>
       <div class="step-item">
         <div class="step-num">03</div>
-        <div class="step-body"><strong>Заполни роадмэп</strong>Расставь приоритеты по модулям и зафиксируй три обязательства перед собой.</div>
+        <div class="step-body">
+          <strong>Сколько времени займет</strong>
+          15–20 минут. Внутри нет правильных или неправильных ответов – только честный разговор с собой. Твои ответы сохраняются автоматически, можно вернуться в любой момент и дополнить или пересмотреть их.
+        </div>
       </div>
       <div class="step-item">
         <div class="step-num">04</div>
-        <div class="step-body"><strong>Приходи на первое занятие</strong>С пониманием, зачем ты здесь и что хочешь изменить.</div>
+        <div class="step-body">
+          <strong>Что делать</strong>
+          <div class="substep"><i>1</i> <span><strong style="color:var(--text);">Жми на кнопку ниже</strong></span></div>
+          <div class="substep"><i>2</i> <span><strong style="color:var(--text);">Пройди все 9 блоков.</strong> По порядку, не пропуская</span></div>
+          <div class="substep"><i>3</i> <span><strong style="color:var(--text);">Заполни персональный роадмэп.</strong> Расставь приоритеты по модулям и зафиксируй 3 обязательства перед собой</span></div>
+          <div class="substep"><i>4</i> <span><strong style="color:var(--text);">Приходи на первое занятие.</strong> С пониманием, зачем ты здесь и что хочешь изменить</span></div>
+        </div>
       </div>
     </div>
 
-    <div class="fg-cta" style="margin-top:24px;">
-      <div class="fg-cta-icon">→</div>
-      <div>
-        <strong>Открыть фреймворк</strong>
-        <p>Пройди его до первого занятия: <a href="https://ai-ark-deploy.vercel.app/" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent-border);">ai-ark-deploy.vercel.app</a>. Вопросы — куратору <a href="https://t.me/kuratoraikovcheg" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent-border);">@kuratoraikovcheg</a>, он на связи Пн–Пт с 10:00 до 19:00 по Киеву.</p>
-      </div>
+    <div class="highlight" style="margin-top:16px;">
+      ⚡ <strong>На выходе – твой личный маршрут через программу.</strong><br>
+      <em>Ты будешь заранее знать, какие модули критичны именно для тебя, и заходить в каждое занятие не как пассивный зритель, а как проактивный участник.</em>
+    </div>
+
+    <div class="btn-wrap"><a class="btn" href="https://ai-ark-deploy.vercel.app/" target="_blank">👉 ОТКРЫТЬ ФРЕЙМВОРК</a></div>
+    <p class="btn-note">Это займет 15 минут. Но сэкономит тебе недели блужданий по программе без результата.<br>Просто сделай это до первого занятия – и ты почувствуешь разницу уже на нем.</p>
+
+    <div class="note" style="margin-top:24px;">
+      <span style="font-size:16px;flex-shrink:0;">💬</span>
+      <span><strong style="color:var(--text);">Остались вопросы?</strong> Пиши: <a href="https://t.me/kuratoraikovcheg" target="_blank" style="color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent-border);">@kuratoraikovcheg</a><span style="display:block;margin-top:6px;">Куратор на связи: Пн–Пт, 10:00–19:00 (по Киеву). Сб–Вс: выходные.</span></span>
     </div>
   </div>
 
